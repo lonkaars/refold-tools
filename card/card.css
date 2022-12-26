@@ -1,0 +1,25 @@
+.card {
+	text-align: center;
+}
+
+.card span {
+	display: block;
+}
+
+hr {
+	height: 10px;
+	border: none;
+}
+
+.card.front .target-word-reading,
+.card.front .target-word-translation,
+.card.front .sentence-translation,
+.card.front hr,
+.card.front ruby rt {
+	display: none;
+}
+
+.sentence-translation {
+	margin-top: 1em;
+}
+
