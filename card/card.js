@@ -3,6 +3,7 @@ function parseSentence(input) {
 	var mode = "normal"; // normal, kanji, reading
 	var out = ""; // output html
 
+	var alwaysvisisble = false; // if furigana is always visible (on front of card)
 	var kanji = ""; // current kanji
 	var reading = ""; // current kanji reading
 
@@ -13,10 +14,21 @@ function parseSentence(input) {
 		if (input[i] == "*") { bold = !bold; out += `<${bold ? "" : "/"}b>`; continue; }
 
 		// parse [kanji](reading) into ruby text
-		if (mode == "normal" && input[i] == "[") { kanji = ""; mode = "kanji"; continue; }
-		if (mode == "kanji" && input[i] == "]") { mode = "normal"; continue; }
-		if (mode == "normal" && kanji.length > 0 && input[i-1] == "]" && input[i] == "(") { reading = ""; mode = "reading"; continue; }
-		if (mode == "reading" && input[i] == ")") { mode = "normal"; out += `<ruby>${kanji}<rt>${reading}</rt></ruby>`; continue; }
+		// [kanji](reading) is only visible on card back
+		// {kanji}(reading) is always visible
+		if (mode == "normal" && input[i] == "[") // hidden reading kanji open
+			{ kanji = ""; mode = "kanji"; alwaysvisisble = false; continue; }
+		if (mode == "normal" && input[i] == "{") // always visible reading kanji open
+			{ kanji = ""; mode = "kanji"; alwaysvisisble = true; continue; }
+		if (mode == "kanji" && input[i] == "]") continue; // hidden reading kanji close
+		if (mode == "kanji" && input[i] == "}") continue; // always visible reading kanji close
+		if (mode == "kanji" && kanji.length > 0 && input[i] == "(") // reading open
+			{ reading = ""; mode = "reading"; continue; }
+		if (mode == "reading" && input[i] == ")") { // reading close
+			mode = "normal";
+			out += `<ruby>${kanji}<rt class="${alwaysvisisble ? 'visible' : 'hidden'}">${reading}</rt></ruby>`;
+			continue;
+		}
 
 		// add current character to selected mode buffer
 		if (mode == "normal") out += input[i];

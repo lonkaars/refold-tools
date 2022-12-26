@@ -23,7 +23,7 @@ hr {
 .card.front .target-word-translation,
 .card.front .sentence-translation,
 .card.front hr,
-.card.front ruby rt {
+.card.front ruby rt.hidden {
 	display: none;
 }
 
