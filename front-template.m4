@@ -1,3 +1,7 @@
+<div class="card front">
+<span class="sentence">{{Complete sentence}}</span>
+</div>
+
 <style>
 undivert(`card/card.css')
 </style>
@@ -5,6 +9,3 @@ undivert(`card/card.css')
 undivert(`card.min.js')
 </script>
 
-<div class="card front">
-<span class="sentence">{{Complete sentence}}</span>
-</div>

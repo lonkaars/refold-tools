@@ -30,8 +30,12 @@ function parseSentence(input) {
 function run() {
 	var sentences = document.getElementsByClassName("sentence");
 
-	for (var sentence of sentences)
+	for (var sentence of sentences) {
+		if (sentence.classList.contains("parsed")) continue;
 		sentence.innerHTML = parseSentence(sentence.innerText);
+		sentence.classList.add("parsed");
+	}
 }
 
 run();
+window.onload = () => run();
