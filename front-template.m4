@@ -1,11 +1,7 @@
 <div class="card front">
-<span class="sentence">{{Complete sentence}}</span>
+<span class="parse sentence foreign">{{Complete sentence}}</span>
 </div>
 
-<style>
-undivert(`card/card.css')
-</style>
-<script defer>
-undivert(`card.min.js')
-</script>
+<style>undivert(`card.min.css')</style>
+<script defer>undivert(`card.min.js')</script>
 

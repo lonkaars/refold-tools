@@ -8,8 +8,12 @@ function parseSentence(input) {
 	var reading = ""; // current kanji reading
 
 	for (var i = 0; i < input.length; i++) {
-		// escape all characters preceded by \
-		if (input[i] == "\\") { out += input[i+1]; i++; continue; }
+		// escape characters preceded by \
+		if (input[i] == "\\") {
+			var escaped = input[i+1];
+			if (escaped == "n") escaped = "<br>"; // newline
+			out += escaped; i++; continue;
+		}
 		// parse *test* into <b>test</b>
 		if (input[i] == "*") { bold = !bold; out += `<${bold ? "" : "/"}b>`; continue; }
 
@@ -40,12 +44,13 @@ function parseSentence(input) {
 }
 
 function run() {
-	var sentences = document.getElementsByClassName("sentence");
+	var input = document.getElementsByClassName("parse");
 
-	for (var sentence of sentences) {
-		if (sentence.classList.contains("parsed")) continue;
-		sentence.innerHTML = parseSentence(sentence.innerText);
-		sentence.classList.add("parsed");
+	for (var el of input) {
+		if (el.classList.contains("parsed")) continue;
+		el.innerHTML = parseSentence(el.innerHTML);
+		el.classList.remove("parse");
+		el.classList.add("parsed");
 	}
 }
 
