@@ -1,22 +1,18 @@
-.mobile .card {
-	font-size: 2.25rem;
-}
+.mobile .card .foreign { font-size: 1.75rem; }
+.mobile .card .native { font-size: 1.25rem; }
 
-.card {
-	text-align: center;
-	font-size: 1.75rem;
-}
+.card .foreign { font-size: 1.5rem; }
+.card .native { font-size: 1.0rem; }
 
-.card span {
-	display: block;
-}
+.card { text-align: center; }
+.card span { display: block; }
 
 hr {
 	height: 10px;
 	border: none;
 	opacity: 20%;
-	background-color: black;
 }
+hr { background-color: black; }
 .nightMode hr { background-color: white; }
 
 .card.front .target-word-reading,
@@ -27,7 +23,5 @@ hr {
 	display: none;
 }
 
-.sentence-translation {
-	margin-top: 1em;
-}
+.sentence-translation { margin-top: 1em; }
 
