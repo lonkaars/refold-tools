@@ -2,6 +2,11 @@
 
 work in progress
 
+this is an anki card template for sentence mining. it has fields for a foreign
+sentence, foreign word, translated word and an optional translated sentence. it
+supports a markdown-like [syntax](#syntax) for adding furigana that is visible
+on either both sides or only on the back side.
+
 ## example
 
 ### input
@@ -28,6 +33,19 @@ work in progress
 <span class="target-word-translation">To underestimate</span><br>
 <span class="sentence-translation">Don't underestimate the master of the house...</span>
 </div>
+
+## syntax
+
+html is passed through, so inline styling (should) still work.
+
+|input|html output|example|
+|-|-|-|
+|`[kanji](furigana)`|`<ruby>kanji<rt>furigana</rt></ruby>`<br>(furigana visible on back side only)|<ruby>kanji<rt>furigana</rt></ruby>|
+|`{kanji}(furigana)`|`<ruby>kanji<rt>furigana</rt></ruby>`<br>(furigana visible on both sides)|<ruby>kanji<rt>furigana</rt></ruby>|
+|`*text*`|`<b>text</b>` (bold)|<b>text</b>|
+|`a\nb`|`a<br>b` (line break)|a<br>b|
+|`\\`|`\` (backslash)|\\|
+|`\[escaped](this)`|`[escaped](this)` (escaped furigana)|\[escaped](this)|
 
 ## set-up
 
