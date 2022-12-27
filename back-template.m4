@@ -1,9 +1,9 @@
 <div class="card back">
-<span class="parse sentence foreign">{{Complete sentence}}</span>
+<span id="sentence" class="parse foreign">{{Complete sentence}}</span>
 <hr class="split">
-<span class="target-word-reading foreign">{{Target word reading}}</span>
-<span class="target-word-translation native">{{Target word translation}}</span>
-<span class="sentence-translation native">{{Complete sentence translation}}</span>
+<span id="target-word-reading" class="foreign">{{Target word reading}}</span>
+<span id="target-word-translation" class="native">{{Target word translation}}</span>
+<span id="sentence-translation" class="native spoiler hidden">{{Complete sentence translation}}</span>
 </div>
 
 <style>undivert(`card.min.css')</style>

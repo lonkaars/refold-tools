@@ -15,13 +15,19 @@ hr {
 hr { background-color: black; }
 .nightMode hr { background-color: white; }
 
-.card.front .target-word-reading,
-.card.front .target-word-translation,
-.card.front .sentence-translation,
+.card.front #target-word-reading,
+.card.front #target-word-translation,
+.card.front #sentence-translation,
 .card.front hr,
 .card.front ruby rt.hidden {
 	display: none;
 }
 
-.sentence-translation { margin-top: 1em; }
+#sentence-translation { margin-top: 1em; }
 
+.spoiler {
+	transition: filter 300ms;
+	cursor: pointer;
+}
+.spoiler.hidden { filter: blur(0.3rem); }
+.spoiler.visible { filter: blur(0rem); }

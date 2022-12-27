@@ -44,13 +44,25 @@ function parseSentence(input) {
 }
 
 function run() {
-	var input = document.getElementsByClassName("parse");
-
-	for (var el of input) {
-		if (el.classList.contains("parsed")) continue;
-		el.innerHTML = parseSentence(el.innerHTML);
-		el.classList.remove("parse");
+	// parse all elements with class parse
+	for (var el of document.getElementsByClassName("parse")) {
+		if (el.classList.contains("parsed")) continue; // ignore already parsed elements
+		el.innerHTML = parseSentence(el.innerHTML); // parse
+		el.classList.remove("parse"); // mark as parsed
 		el.classList.add("parsed");
+	}
+
+	// toggle spoiler by clicking
+	for (var el of document.getElementsByClassName("spoiler")) {
+		el.onclick = function () {
+			this.classList.toggle("hidden");
+			this.classList.toggle("visible");
+		};
+	}
+
+	// remove spoiler from sentence translation if word reading field is empty
+	if(document.getElementById("target-word-reading").innerText.length == 0) {
+		document.getElementById("sentence-translation").classList.remove("hidden");
 	}
 }
 
