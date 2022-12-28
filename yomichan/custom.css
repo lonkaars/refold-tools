@@ -6,7 +6,7 @@
     border: 2px solid var(--tag-color);
     border-radius: 6px;
 }
-.frequency-group-tag { border: none !important; }
+.frequency-group-tag .tag { border: none !important; }
 .tag .tag-body::before { display: none; }
 .frequency-value {
     color: var(--tag-color);
