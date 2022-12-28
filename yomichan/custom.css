@@ -1,0 +1,22 @@
+.search-header { margin-top: 12px; }
+.search-options { display: none; }
+#content-body { background-color: #000000; }
+.tag .tag-label { background-color: unset; }
+.tag {
+    border: 2px solid var(--tag-color);
+    border-radius: 6px;
+}
+.frequency-group-tag { border: none !important; }
+.tag .tag-body::before { display: none; }
+.frequency-value {
+    color: var(--tag-color);
+    font-weight: bold;
+}
+.search-textbox-container {
+    border-radius: 6px;
+    overflow: hidden;
+}
+@media (hover: none) {
+    .entry .actions .action-button { padding: 16px; }
+    .search-header .search-button { width: 48px; }
+}
