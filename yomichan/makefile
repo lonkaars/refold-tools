@@ -41,6 +41,9 @@ patch:
 	ln -sf search-patched.html yomichan/search.html
 	ln -sf manifest-patched.json yomichan/manifest.json
 
+yomichan-chrome-patched.zip: yomichan patch
+	zip -qr $@ $<
+
 clean:
-	$(RM) -r sentence-export.min.js yomichan yomichan-chrome.zip
+	$(RM) -r sentence-export.min.js yomichan yomichan-chrome.zip yomichan-chrome-patched.zip
 
