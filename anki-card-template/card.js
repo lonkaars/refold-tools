@@ -43,6 +43,18 @@ function parseSentence(input) {
 	return out;
 }
 
+function layout() {
+	// set vertical layout on vertical displays (primarily mobile screens)
+	var el = document.getElementById("card");
+	if (screen.orientation.type.startsWith("landscape") && el.classList.contains("vertical-layout")) {
+		el.classList.remove("vertical-layout");
+		el.classList.add("horizontal-layout");
+	} else if (screen.orientation.type.startsWith("portrait") && el.classList.contains("horizontal-layout")) {
+		el.classList.remove("horizontal-layout");
+		el.classList.add("vertical-layout");
+	}
+}
+
 function run() {
 	// parse all elements with class parse
 	for (var el of document.getElementsByClassName("parse")) {
@@ -64,7 +76,11 @@ function run() {
 	if(document.getElementById("target-word-reading").innerText.length == 0) {
 		document.getElementById("sentence-translation").classList.remove("hidden");
 	}
+
+	layout();
 }
 
 run();
 window.onload = () => run();
+window.onresize = () => layout();
+window.ondeviceorientation = () => layout();
