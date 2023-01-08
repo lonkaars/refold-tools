@@ -1,3 +1,5 @@
+body { margin: 0; }
+
 .mobile #card .foreign { font-size: 1.75rem; }
 .mobile #card .native { font-size: 1.25rem; }
 
@@ -35,6 +37,8 @@
 #card.vertical-layout {
 	display: grid;
 	grid-auto-columns: 1fr auto auto;
+	height: 100vh;
+	overflow: hidden;
 }
 #card.vertical-layout #back {
 	display: flex;
@@ -46,7 +50,10 @@
 #card.vertical-layout #separator { grid-column: 2; }
 #card.vertical-layout #front { grid-column: 3; }
 
-#card.vertical-layout #sentence { writing-mode: vertical-rl; }
+#card.vertical-layout #sentence {
+	writing-mode: vertical-rl;
+	margin: 1em 0.5em;
+}
 
 #card.horizontal-layout #separator {
 	height: 10px;
