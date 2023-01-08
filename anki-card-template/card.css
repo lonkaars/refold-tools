@@ -40,9 +40,10 @@ body { margin: 0; }
 	height: 100vh;
 	overflow: hidden;
 }
-#card.vertical-layout #back {
+#card.vertical-layout #back { flex-direction: column; }
+#card.vertical-layout #back,
+#card.vertical-layout #front {
 	display: flex;
-	flex-direction: column;
 	justify-content: center;
 }
 
