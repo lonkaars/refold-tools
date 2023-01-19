@@ -1,45 +1,54 @@
+/* body margin */
 body {
 	margin: 0;
 	width: 100vw;
 	height: 100vh;
 }
 
+/* vertical center card in body */
 body {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 }
 
+/* default font sizes (mobile) */
 .mobile #card .foreign { font-size: 1.75rem; }
 .mobile #card .native { font-size: 1.25rem; }
 
+/* default font sizes (desktop) */
 #card .foreign { font-size: 1.5rem; }
 #card .native { font-size: 1.0rem; }
 
+/* default text alignment and layout */
 #card { text-align: center; }
 #card > * > span { display: block; }
 
+/* separator defaults */
 #separator {
 	border: none;
 	opacity: 20%;
 	margin: 0;
 }
+
+/* separator color */
 #separator { background-color: black; }
 .nightMode #separator { background-color: white; }
 
+/* separator size */
 #card.horizontal-layout #separator { height: 10px; }
 #card.vertical-layout #separator { width: 10px; }
 
-#card.front #target-word-reading,
-#card.front #target-word-translation,
-#card.front #sentence-translation,
-#card.front hr,
-#card.front ruby rt.hidden {
+/* hide answer and separator on card front */
+#card.front #back,
+#card.front hr {
 	display: none;
 }
 
+/* extra space above complete translated sentence */
 #card #back #sentence-translation { margin-top: 2em; }
 
+/* blur spoiler */
 .spoiler {
 	transition: filter 300ms;
 	cursor: pointer;
@@ -47,8 +56,11 @@ body {
 .spoiler.hidden { filter: blur(0.3rem); }
 .spoiler.visible { filter: blur(0rem); }
 
+/* fill display horizontally or vertically */
 #card.horizontal-layout { width: 100vw; }
 #card.vertical-layout { height: 100vh; }
+
+/* grid column layout for vertical card layout */
 #card.vertical-layout > * { grid-row: 1; }
 #card.vertical-layout {
 	display: grid;
@@ -61,23 +73,26 @@ body {
 	justify-content: center;
 }
 
+/* grid column settings */
 #card.vertical-layout #back { grid-column: 1; }
 #card.vertical-layout #separator { grid-column: 2; }
 #card.vertical-layout #front { grid-column: 3; }
 
+/* default text element spacing */
 #card.horizontal-layout > * > span,
 #card.vertical-layout > #back > span {
 	padding: 0 1em;
 	margin: 0.5em auto;
 }
-
 #card.vertical-layout #sentence {
 	padding: 1em 0;
 	margin: auto 0.5em;
 }
 
+/* vertical japanese text only in sentence */
 #card.vertical-layout #sentence { writing-mode: vertical-rl; }
 
+/* max text column width (~30 characters in japanese, ~50 in latin) */
 #card.vertical-layout #sentence { max-height: 30em; }
 #card.horizontal-layout span,
 #card.vertical-layout #back span {
@@ -86,5 +101,6 @@ body {
 	margin-right: auto;
 }
 
+/* display kana reading below kanji in vertical layout */
 #card.vertical-layout #target-word-reading .reading { display: block; }
 
