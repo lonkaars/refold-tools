@@ -68,7 +68,6 @@ body { margin: 0; }
 
 #card.vertical-layout #sentence {
 	writing-mode: vertical-rl;
-	text-orientation: upright;
 }
 
 #card.horizontal-layout span,
