@@ -45,7 +45,7 @@ HTMLElement.prototype.parse = function() {
 		}
 
 		if (this.classList.contains("parse-brackets")) {
-			if (i == 0) { out += `<span class="kanji">` }
+			if (i == 0) { out += `<span class="kanji">`; }
 			if (input[i] == '\u3010') { out += `</span><span class="reading">${input[i]}`; continue; }
 			if (input[i] == '\u3011') { out += `${input[i]}</span>`; continue; }
 		}
@@ -58,7 +58,7 @@ HTMLElement.prototype.parse = function() {
 
 	this.innerHTML = out;
 	this.classList.add("parsed");
-}
+};
 
 function layout() {
 	// set vertical layout on vertical displays (primarily mobile screens)
