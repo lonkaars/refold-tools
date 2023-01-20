@@ -174,3 +174,19 @@ body {
 
 /* don't break syllables in the reading field on vertical mobile */
 .mobile #card.vertical-layout #back #target-word-reading .reading .syllable { white-space: nowrap; }
+
+/* word note style */
+#card #target-word-reading {
+	display: inline-block;
+	position: relative;
+}
+.mobile #card #target-word-reading .note { left: 0.5em; }
+#card #target-word-reading .note {
+	position: absolute;
+	left: 1em;
+	top: 50%;
+	transform: translate(-100%, -50%);
+	font-style: italic;
+	opacity: 50%;
+	font-size: 0.75em;
+}
