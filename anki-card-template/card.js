@@ -55,6 +55,9 @@ HTMLElement.prototype.parse = function() {
 
 		if (this.classList.contains("parse-brackets")) {
 			if (i == 0) {
+				// start kanji reading
+				out += `<span class="kanji">`;
+
 				var match = input.match(/\((.+?)\)/);
 				// display "(note)" before kanji
 				if (match) {
@@ -62,9 +65,6 @@ HTMLElement.prototype.parse = function() {
 					note_head = match.index;
 					note_tail = note_head + match[0].length;
 				}
-				// start kanji reading
-				out += `<span class="kanji">`;
-				continue;
 			}
 			// ignore note if parsed
 			if (i == note_head) { i += note_tail - 1; continue; }
