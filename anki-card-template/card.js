@@ -117,7 +117,7 @@ function run() {
 	}
 
 	// remove spoiler from sentence translation if word reading field is empty
-	if(document.getElementById("target-word-reading").innerText.length == 0) {
+	if(document.getElementById("target-word-reading").classList.contains("empty")) {
 		document.getElementById("sentence-translation").classList.remove("hidden");
 	}
 
