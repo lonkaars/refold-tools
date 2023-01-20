@@ -41,8 +41,9 @@ body {
 
 /* hide answer and separator on card front */
 #card.front #back,
-#card.front hr {
-	display: none;
+#card.front hr,
+#card.front ruby rt.hidden {
+	display: none !important;
 }
 
 /* extra space above complete translated sentence */
