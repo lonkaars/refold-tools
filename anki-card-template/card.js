@@ -67,7 +67,7 @@ HTMLElement.prototype.parse = function() {
 				}
 			}
 			// ignore note if parsed
-			if (i == note_head) { i += note_tail - 1; continue; }
+			else if (i == note_head) { i = note_tail - 1; continue; }
 			// reading open bracket
 			if (input[i] == '\u3010') { out += `</span><span class="reading"><span class="bracket">${input[i]}</span><span class="syllable">`; continue; }
 			// reading closing bracket
