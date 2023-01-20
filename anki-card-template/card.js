@@ -12,6 +12,8 @@ HTMLElement.prototype.parse = function() {
 	var italic = false; // currently italic
 	var mode = "normal"; // normal, kanji, reading
 	var out = ""; // output html
+	var note_head = 0;
+	var note_tail = 0;
 
 	var alwaysvisisble = false; // if furigana is always visible (on front of card)
 	var kanji = ""; // current kanji
@@ -52,10 +54,26 @@ HTMLElement.prototype.parse = function() {
 		}
 
 		if (this.classList.contains("parse-brackets")) {
-			if (i == 0) { out += `<span class="kanji">`; }
+			if (i == 0) {
+				var match = input.match(/\((.+?)\)/);
+				// display "(note)" before kanji
+				if (match) {
+					out += `<span class="note">${match[1]}</span>`;
+					note_head = match.index;
+					note_tail = note_head + match[0].length;
+				}
+				// start kanji reading
+				out += `<span class="kanji">`;
+				continue;
+			}
+			// ignore note if parsed
+			if (i == note_head) { i += note_tail - 1; continue; }
+			// reading open bracket
 			if (input[i] == '\u3010') { out += `</span><span class="reading"><span class="bracket">${input[i]}</span><span class="syllable">`; continue; }
-			if (input[i] == '\u30fb') { out += `</span><span class="syllable-separator">${input[i]}</span><span class="syllable">`; continue; }
+			// reading closing bracket
 			if (input[i] == '\u3011') { out += `</span><span class="bracket">${input[i]}</span></span>`; continue; }
+			// interpunct (syllable separator)
+			if (input[i] == '\u30fb') { out += `</span><span class="syllable-separator">${input[i]}</span><span class="syllable">`; continue; }
 		}
 
 		if (this.classList.contains("parse-tags")) {
