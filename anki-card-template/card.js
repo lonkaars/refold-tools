@@ -1,3 +1,10 @@
+function calculateTagHue(input) {
+	var out = 0;
+	for (var i = 0; i < input.length; i++)
+		out ^= input.charCodeAt(i);
+	return Math.floor((out * 12) % 360);
+}
+
 HTMLElement.prototype.parse = function() {
 	if (this.classList.contains("parsed")) return; // ignore already parsed elements
 	var input = this.innerHTML;
@@ -50,6 +57,12 @@ HTMLElement.prototype.parse = function() {
 			if (input[i] == '\u3011') { out += `${input[i]}</span>`; continue; }
 		}
 
+		if (this.classList.contains("parse-tags")) {
+			for (var tag of input.split(" "))
+				out += `<span class="tag" style="--tag-hue: ${calculateTagHue(tag)};"><span class="inner">${tag}</span></span>`;
+			break;
+		}
+
 		// add current character to selected mode buffer
 		if (mode == "normal") out += input[i];
 		if (mode == "kanji") kanji += input[i];
@@ -58,6 +71,7 @@ HTMLElement.prototype.parse = function() {
 
 	this.innerHTML = out;
 	this.classList.add("parsed");
+	if (input.length == 0) this.classList.add("empty");
 };
 
 function layout() {

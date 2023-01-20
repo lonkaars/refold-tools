@@ -7,6 +7,7 @@
 <span id="target-word-reading" class="parse parse-format parse-brackets foreign">{{Target word reading}}</span>
 <span id="target-word-translation" class="parse parse-format native">{{Target word translation}}</span>
 <span id="sentence-translation" class="parse parse-format native spoiler hidden">{{Complete sentence translation}}</span>
+<span id="tags" class="parse parse-tags">{{Tags}}</span>
 </div>
 </div>
 
