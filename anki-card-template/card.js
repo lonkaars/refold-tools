@@ -53,8 +53,9 @@ HTMLElement.prototype.parse = function() {
 
 		if (this.classList.contains("parse-brackets")) {
 			if (i == 0) { out += `<span class="kanji">`; }
-			if (input[i] == '\u3010') { out += `</span><span class="reading">${input[i]}`; continue; }
-			if (input[i] == '\u3011') { out += `${input[i]}</span>`; continue; }
+			if (input[i] == '\u3010') { out += `</span><span class="reading"><span class="bracket">${input[i]}</span><span class="syllable">`; continue; }
+			if (input[i] == '\u30fb') { out += `</span><span class="syllable-separator">${input[i]}</span><span class="syllable">`; continue; }
+			if (input[i] == '\u3011') { out += `</span><span class="bracket">${input[i]}</span></span>`; continue; }
 		}
 
 		if (this.classList.contains("parse-tags")) {

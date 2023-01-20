@@ -90,6 +90,9 @@ body {
 	padding: 1em 0;
 	margin: auto 0.5em;
 }
+/* mobile spacing */
+.mobile #card.horizontal-layout > * > span,
+.mobile #card.vertical-layout > #back > span { padding: 0 0.5em; }
 
 /* vertical japanese text only in sentence */
 #card.vertical-layout #sentence { writing-mode: vertical-rl; }
@@ -168,3 +171,6 @@ body {
 
 /* make sure to hide empty fields */
 .parse.empty { display: none !important; }
+
+/* don't break syllables in the reading field on vertical mobile */
+.mobile #card.vertical-layout #back #target-word-reading .reading .syllable { white-space: nowrap; }
