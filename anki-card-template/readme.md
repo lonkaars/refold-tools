@@ -70,6 +70,10 @@ are instructions to apply to an empty deck.
 
 This card template is also compatible with AnkiDroid, but you need to add
 `.night_mode { }` to the Styling tab for this to work. For some reason
-AnkiDroid's night mode CSS class is called `night_mode` instead of `nightMode`
-like the desktop version.
+AnkiDroid checks if the card has dark mode 'support' by checking if the Styling
+tab CSS contains the literal string `.night_mode`. [The
+documentation](https://docs.ankiweb.net/templates/styling.html#night-mode)
+suggests that the night mode CSS class is called `nightMode` instead of
+`night_mode`, but `night_mode` works fine on desktop too, so is used in this
+card template.
 

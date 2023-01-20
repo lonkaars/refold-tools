@@ -33,7 +33,6 @@ body {
 
 /* separator color */
 #separator { background-color: black; }
-.nightMode #separator,
 .night_mode #separator { background-color: white; }
 
 /* separator size */
@@ -125,10 +124,8 @@ body {
 
 /* tag style */
 #card #back #tags .tag { background-color: hsl(calc(1deg * var(--tag-hue)), 60%, 20%); }
-.nightMode #card #back #tags .tag,
 .night_mode #card #back #tags .tag { background-color: hsl(calc(1deg * var(--tag-hue)), 65%, 80%); }
 #card #back #tags .tag .inner { color: white; }
-.nightMode #card #back #tags .tag .inner,
 .night_mode #card #back #tags .tag .inner { color: black; }
 #card #back #tags .tag {
 	--tag-hue: 0;
