@@ -166,4 +166,5 @@ body {
 .mobile #card.vertical-layout #back #tags { flex-direction: column; }
 .mobile #card.vertical-layout #back #tags .tag { max-width: max-content; }
 
+/* make sure to hide empty fields */
 .parse.empty { display: none !important; }

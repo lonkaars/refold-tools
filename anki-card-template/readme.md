@@ -64,7 +64,12 @@ are instructions to apply to an empty deck.
 3. In the 'Browse' view, click on Cards... (you might need to create a
    temporary card in a deck) and paste the contents of front-template.html and
    back-template.html in the front template and back template of the card type.
-   Make sure the Styling tab doesn't contain any code as this will override the
-   built-in styles.
-4. Profit
+4. You can add any custom styles you want in the Styling tab, but I recommend
+   you remove the default CSS.
+5. Profit
+
+This card template is also compatible with AnkiDroid, but you need to add
+`.night_mode { }` to the Styling tab for this to work. For some reason
+AnkiDroid's night mode CSS class is called `night_mode` instead of `nightMode`
+like the desktop version.
 
