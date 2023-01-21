@@ -135,15 +135,17 @@ body {
 	transition-property: padding, grid-template-rows, grid-template-columns;
 	transition-duration: 0.3s;
 	overflow: hidden;
-	position: relative;
 	display: grid;
 	grid-template-rows: 0fr;
 	grid-template-columns: 0fr;
+	justify-content: center;
+	align-items: center;
 }
 #card #back #tags .tag .inner {
 	position: relative;
 	opacity: 0;
-	transform: translate(-50%, -50%);
+	left: 50%;
+	transform: translate(-50%, 0%);
 	transition-duration: 0.3s;
 	transition-property: opacity, transform;
 	white-space: nowrap;
@@ -155,14 +157,9 @@ body {
 
 /* tag hover/hold expand */
 #card #back #tags:active,
-#card #back #tags:hover {
-	opacity: 1;
-}
+#card #back #tags:hover { opacity: 1; }
 #card #back #tags:active .tag .inner,
-#card #back #tags:hover .tag .inner {
-	transform: translate(0%, 0%);
-	opacity: 1;
-}
+#card #back #tags:hover .tag .inner { opacity: 1; }
 #card #back #tags:active .tag,
 #card #back #tags:hover .tag {
 	grid-template-rows: 1fr;
