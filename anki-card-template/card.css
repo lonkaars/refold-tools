@@ -1,3 +1,14 @@
+/* default fonts */
+body {
+	font-family: "Inter", "Hiragino Kaku Gothic ProN", sans-serif;
+	font-weight: 400;
+}
+
+#card #sentence { color: #000b; }
+#card #sentence b { color: #000f; }
+.night_mode #card #sentence { color: #fffb; }
+.night_mode #card #sentence b { color: #ffff; }
+
 /* body margin */
 body {
 	margin: 0;
@@ -107,11 +118,15 @@ body {
 	margin-right: auto;
 }
 
-/* display kana reading below kanji in vertical layout */
-#card.vertical-layout #target-word-reading .reading { display: block; }
+/* display kana reading smaller and below kanji in vertical layout */
+#card.vertical-layout #target-word-reading .reading {
+	display: block;
+	font-size: 1rem;
+}
 
 /* tag container */
 #card #back #tags {
+	font-size: 80%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -215,6 +230,16 @@ body {
 /* mobile definitions style */
 .mobile #card.vertical-layout #target-word-translation .definitions .definition-separator { display: none; }
 .mobile #card.vertical-layout #target-word-translation .definitions .definition {
-	display: list-item;
-	list-style: disc inside;
+	position: relative;
+	display: block;
+	max-width: max-content;
+	margin: 0 auto;
+}
+.mobile #card.vertical-layout #target-word-translation .definitions .definition::before {
+	content: "\00b7"; /* interpunct */
+	position: absolute;
+	left: -0.25em;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 150%;
 }
