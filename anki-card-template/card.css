@@ -4,6 +4,8 @@ body {
 	width: 100vw;
 	height: 100vh;
 }
+/* remove AnkiDroid margin (causes little overscroll) */
+.mobile #content { margin: 0; }
 
 /* vertical center card in body */
 body {
