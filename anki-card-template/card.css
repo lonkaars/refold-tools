@@ -179,14 +179,17 @@ body {
 /* don't break syllables in the reading field on vertical mobile */
 .mobile #card.vertical-layout #back #target-word-reading .reading .syllable { white-space: nowrap; }
 
-/* word note style */
-#card #target-word-reading .kanji { position: relative; }
-#card #target-word-reading .note {
-	position: absolute;
+/* subtile style */
+.subtile {
 	font-style: italic;
 	opacity: 50%;
-	font-size: 0.75em;
+	font-size: 75%;
+	vertical-align: baseline;
 }
+
+/* word note style */
+#card #target-word-reading .kanji { position: relative; }
+#card #target-word-reading .note { position: absolute; }
 #card #target-word-reading .note {
 	left: -0.25em;
 	top: 50%;
@@ -196,4 +199,22 @@ body {
 	top: -0.25em;
 	left: 50%;
 	transform: translate(-50%, -100%);
+}
+
+/* definitions */
+#card #target-word-translation .definitions {
+	display: inline;
+	padding: 0;
+}
+#card #target-word-translation .definitions .definition,
+#card #target-word-translation .definitions .definition-separator {
+	list-style: none;
+	display: inline;
+}
+
+/* mobile definitions style */
+.mobile #card.vertical-layout #target-word-translation .definitions .definition-separator { display: none; }
+.mobile #card.vertical-layout #target-word-translation .definitions .definition {
+	display: list-item;
+	list-style: disc inside;
 }

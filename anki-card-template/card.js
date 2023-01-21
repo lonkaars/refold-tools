@@ -61,7 +61,7 @@ HTMLElement.prototype.parse = function() {
 				var match = input.match(/\((.+?)\)/);
 				// display "(note)" before kanji
 				if (match) {
-					out += `<span class="note">${match[1]}</span>`;
+					out += `<span class="note subtile">${match[1]}</span>`;
 					note_head = match.index;
 					note_tail = note_head + match[0].length;
 				}
@@ -76,17 +76,35 @@ HTMLElement.prototype.parse = function() {
 			if (input[i] == '\u30fb') { out += `</span><span class="syllable-separator">${input[i]}</span><span class="syllable">`; continue; }
 		}
 
-		if (this.classList.contains("parse-tags")) {
-			for (var tag of input.split(" "))
-				out += `<span class="tag" style="--tag-hue: ${calculateTagHue(tag)};"><span class="inner">${tag}</span></span>`;
-			break;
-		}
-
 		// add current character to selected mode buffer
 		if (mode == "normal") out += input[i];
 		if (mode == "kanji") kanji += input[i];
 		if (mode == "reading") reading += input[i];
 	}
+
+	// oneshot parsers down below
+	input = out;
+	out = "";
+
+	// tags (separated by space)
+	if (this.classList.contains("parse-tags")) {
+		for (var tag of input.split(" "))
+			out += `<span class="tag" style="--tag-hue: ${calculateTagHue(tag)};"><span class="inner">${tag}</span></span>`;
+	}
+
+	// definitions (separated by comma)
+	else if (this.classList.contains("parse-definitions")) {
+		out += `<ul class="definitions">`;
+		out += input.split(",")
+			.map(s => s.trim())
+			.map(s => s.replace(/{(.+)}/g, `<span class="subtile">$1</span>`)) // {note}
+			.map(s => `<li class="definition">${s}</li>`)
+			.join(`<li class="definition-separator">, </li>`);
+		out += `</ul>`;
+	}
+
+	// no oneshot parser used
+	else out = input;
 
 	this.innerHTML = out;
 	this.classList.add("parsed");
