@@ -1,3 +1,19 @@
+function charNotLatin(input) {
+	var code = input.charCodeAt(0);
+	if (0x0000 <= code && code <= 0x007f) return false; // basic latin
+	return true;
+}
+
+function charNotJapanese(input) {
+	var code = input.charCodeAt(0);
+	if (0x3000 <= code && code <= 0x303f) return false; // japanese punctuation
+	if (0x3040 <= code && code <= 0x309f) return false; // hiragana
+	if (0x30a0 <= code && code <= 0x30ff) return false; // katakana
+	if (0xff00 <= code && code <= 0xffef) return false; // full-width latin + half-width katakana
+	if (0x4e00 <= code && code <= 0x9faf) return false; // kanji
+	return true;
+}
+
 function calculateTagHue(input) {
 	var out = 0;
 	for (var i = 0; i < input.length; i++)
@@ -5,22 +21,50 @@ function calculateTagHue(input) {
 	return Math.floor((out * 12) % 360);
 }
 
-HTMLElement.prototype.parse = function() {
-	if (this.classList.contains("parsed")) return; // ignore already parsed elements
-	var input = this.innerHTML;
-	var bold = false; // currently bold
-	var italic = false; // currently italic
-	var mode = "normal"; // normal, kanji, reading
-	var out = ""; // output html
-	var note_head = 0;
-	var note_tail = 0;
+function HTMLtoParseArr(input) {
+	var out = [];
+	var node = { data: "", type: "text", latin: false, japanese: false };
+	var tag_open = false;
+	var new_node = false;
 
-	var alwaysvisisble = false; // if furigana is always visible (on front of card)
-	var kanji = ""; // current kanji
-	var reading = ""; // current kanji reading
+	var clear = () => {
+		out.push(node);
+		node = { data: "", type: "text", latin: false, japanese: false };
+	};
 
 	for (var i = 0; i < input.length; i++) {
-		if (this.classList.contains("parse-format")) {
+		new_node = false;
+		if (!charNotJapanese(input[i])) node.japanese = true;
+		if (!charNotLatin(input[i])) node.latin = true;
+
+		if (input[i] == "<") {
+			clear();
+			tag_open = true;
+			node.type = "html";
+		}
+		if (input[i] == ">" && tag_open == true) {
+			tag_open = false;
+			node.data += input[i];
+			clear();
+			continue;
+		}
+
+		node.data += input[i];
+	}
+	if (new_node == false) out.push(node);
+
+	return out;
+}
+
+function parseFormat(nodes) {
+	for (var node of nodes) {
+		if (node.type == "html") continue;
+
+		var input = node.data;
+		var bold = false; // currently bold
+		var italic = false; // currently italic
+		var out = "";
+		for (var i = 0; i < input.length; i++) {
 			// escape characters preceded by \
 			if (input[i] == "\\") {
 				var escaped = input[i+1];
@@ -32,9 +76,26 @@ HTMLElement.prototype.parse = function() {
 			if (input[i] == "*") { bold = !bold; out += `<${bold ? "" : "/"}b>`; continue; }
 			// parse _test_ into <i>test</i>
 			if (input[i] == "_") { italic = !italic; out += `<${italic ? "" : "/"}i>`; continue; }
-		}
 
-		if (this.classList.contains("parse-furigana")) {
+			out += input[i];
+		}
+		node.data = out;
+	}
+	return HTMLtoParseArr(nodes.map(n => n.data).join("")); // re-parse for newly created html
+}
+
+function parseFurigana(nodes) {
+	for (var node of nodes) {
+		if (node.type == "html") continue;
+
+		var input = node.data;
+		var mode = "normal"; // normal, kanji, reading
+		var out = ""; // output html
+		var alwaysvisisble = false; // if furigana is always visible (on front of card)
+		var kanji = ""; // current kanji
+		var reading = ""; // current kanji reading
+
+		for (var i = 0; i < input.length; i++) {
 			// parse [kanji](reading) into ruby text
 			// [kanji](reading) is only visible on card back
 			// {kanji}(reading) is always visible
@@ -51,9 +112,27 @@ HTMLElement.prototype.parse = function() {
 				out += `<ruby>${kanji}<rt class="${alwaysvisisble ? 'visible' : 'hidden'}">${reading}</rt></ruby>`;
 				continue;
 			}
-		}
 
-		if (this.classList.contains("parse-brackets")) {
+			// add current character to selected mode buffer
+			if (mode == "normal") out += input[i];
+			if (mode == "kanji") kanji += input[i];
+			if (mode == "reading") reading += input[i];
+		}
+		node.data = out;
+	}
+	return HTMLtoParseArr(nodes.map(n => n.data).join("")); // re-parse for newly created html
+}
+
+function parseBrackets(nodes) {
+	for (var node of nodes) {
+		if (node.type == "html") continue;
+
+		var input = node.data;
+		var note_head = 0;
+		var note_tail = 0;
+		var out = ""; // output html
+
+		for (var i = 0; i < input.length; i++) {
 			if (i == 0) {
 				// start kanji reading
 				out += `<span class="kanji">`;
@@ -74,41 +153,49 @@ HTMLElement.prototype.parse = function() {
 			if (input[i] == '\u3011') { out += `</span><span class="bracket">${input[i]}</span></span>`; continue; }
 			// interpunct (syllable separator)
 			if (input[i] == '\u30fb') { out += `</span><span class="syllable-separator">${input[i]}</span><span class="syllable">`; continue; }
+
+			out += input[i];
 		}
-
-		// add current character to selected mode buffer
-		if (mode == "normal") out += input[i];
-		if (mode == "kanji") kanji += input[i];
-		if (mode == "reading") reading += input[i];
+		node.data = out;
 	}
+	return HTMLtoParseArr(nodes.map(n => n.data).join("")); // re-parse for newly created html
+}
 
-	// oneshot parsers down below
-	input = out;
-	out = "";
+function parseTags(nodes) {
+	var out = "";
+	for (var tag of nodes.map(n => n.data).join("").split(" "))
+		out += `<span class="tag" style="--tag-hue: ${calculateTagHue(tag)};"><span class="inner">${tag}</span></span>`;
+	return HTMLtoParseArr(out);
+}
 
-	// tags (separated by space)
-	if (this.classList.contains("parse-tags")) {
-		for (var tag of input.split(" "))
-			out += `<span class="tag" style="--tag-hue: ${calculateTagHue(tag)};"><span class="inner">${tag}</span></span>`;
-	}
+function parseDefinitions(nodes) {
+	out = `<ul class="definitions">`;
+	out += nodes.map(n => n.data).join("").split(",")
+		.map(s => s.trim())
+		.map(s => s.replace(/{(.+)}/g, `<span class="subtile">$1</span>`)) // {note}
+		.map(s => `<li class="definition">${s}</li>`)
+		.join(`<li class="definition-separator">, </li>`);
+	out += `</ul>`;
+	return HTMLtoParseArr(out);
+}
 
-	// definitions (separated by comma)
-	else if (this.classList.contains("parse-definitions")) {
-		out += `<ul class="definitions">`;
-		out += input.split(",")
-			.map(s => s.trim())
-			.map(s => s.replace(/{(.+)}/g, `<span class="subtile">$1</span>`)) // {note}
-			.map(s => `<li class="definition">${s}</li>`)
-			.join(`<li class="definition-separator">, </li>`);
-		out += `</ul>`;
-	}
+HTMLElement.prototype.parse = function() {
+	if (this.classList.contains("parsed")) return; // ignore already parsed elements
+	var input = this.innerHTML; // get raw data from anki field
+	var nodes = HTMLtoParseArr(input); // seperate user text from html formatting (keep html intact)
 
-	// no oneshot parser used
-	else out = input;
+	// parsers
+	if (this.classList.contains("parse-format")) nodes = parseFormat(nodes);
+	if (this.classList.contains("parse-furigana")) nodes = parseFurigana(nodes);
+	if (this.classList.contains("parse-brackets")) nodes = parseBrackets(nodes);
+	if (this.classList.contains("parse-tags")) nodes = parseTags(nodes);
+	if (this.classList.contains("parse-definitions")) nodes = parseDefinitions(nodes);
 
+	// join parsed text with unmodified html
+	var out = nodes.map(n => n.data).join("");
 	this.innerHTML = out;
 	this.classList.add("parsed");
-	if (input.length == 0) this.classList.add("empty");
+	if (out.length == 0) this.classList.add("empty");
 };
 
 function layout() {
@@ -124,20 +211,19 @@ function layout() {
 }
 
 function run() {
-	for (var el of document.getElementsByClassName("parse")) el.parse();
+	for (var el of document.getElementsByClassName("parse"))
+		el.parse();
 
 	// toggle spoiler by clicking
-	for (var el of document.getElementsByClassName("spoiler")) {
+	for (var el of document.getElementsByClassName("spoiler"))
 		el.onclick = function () {
 			this.classList.toggle("hidden");
 			this.classList.toggle("visible");
 		};
-	}
 
 	// remove spoiler from sentence translation if word reading field is empty
-	if(document.getElementById("target-word-reading").classList.contains("empty")) {
+	if(document.getElementById("target-word-reading").classList.contains("empty"))
 		document.getElementById("sentence-translation").classList.remove("hidden");
-	}
 
 	layout();
 }
