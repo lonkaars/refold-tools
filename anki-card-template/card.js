@@ -197,7 +197,7 @@ function parseDefinitions(nodes) {
 		.map(s => s.trim())
 		.map(s => s.replace(/{(.+)}/g, `<span class="subtile">$1</span>`)) // {note}
 		.map(s => `<li class="definition">${s}</li>`)
-		.join(`<li class="definition-separator">, </li>`);
+		.join(`<li class="definition-separator"></li>`);
 	out += `</ul>`;
 	return HTMLtoParseArr(out);
 }

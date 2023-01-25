@@ -255,6 +255,9 @@ body {
 }
 
 /* mobile definitions style */
+#card #target-word-translation .definitions .definition-separator::after {
+	content: ", ";
+}
 .mobile #card.vertical-layout #target-word-translation .definitions .definition-separator { display: none; }
 .mobile #card.vertical-layout #target-word-translation .definitions .definition {
 	position: relative;

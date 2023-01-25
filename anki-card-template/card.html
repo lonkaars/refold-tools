@@ -31,14 +31,24 @@
 <span id="sentence-translation" class="parse parse-format native spoiler parse-script hidden">This village is now in danger of *extinction* because of _Vah Ruta_, the water divine beast.</span>
 <span id="tags" class="parse parse-tags">ゼルダの伝説 ブレス・オブ・ザ・ワイルド</span>
 </div>
-</div>
 
+<style>
+#card.front #dev-button-flip::after { content: "front"; }
+#card.back #dev-button-flip::after { content: "back"; }
+#card.horizontal-layout #dev-button-layout::after { content: "horizontal layout"; }
+#card.vertical-layout #dev-button-layout::after { content: "vertical layout"; }
+body:not(.night_mode) #dev-button-theme::after { content: "light mode"; }
+body.night_mode #dev-button-theme::after { content: "dark mode"; }
+body:not(.mobile) #dev-button-platform::after { content: "desktop"; }
+body.mobile #dev-button-platform::after { content: "mobile"; }
+</style>
 <div id="dev-buttons">
-<button onclick="document.getElementById('card').classList.toggle('back'); document.getElementById('card').classList.toggle('front')">toggle view</button>
-<button onclick="document.getElementById('card').classList.toggle('horizontal-layout'); document.getElementById('card').classList.toggle('vertical-layout')">toggle layout</button>
-<button onclick="document.body.classList.toggle('night_mode')">toggle dark</button>
-<button onclick="document.body.classList.toggle('mobile')">toggle mobile</button>
+<button id="dev-button-flip" onclick="document.getElementById('card').classList.toggle('back'); document.getElementById('card').classList.toggle('front')"></button>
+<button id="dev-button-layout" onclick="document.getElementById('card').classList.toggle('horizontal-layout'); document.getElementById('card').classList.toggle('vertical-layout')"></button>
+<button id="dev-button-theme" onclick="document.body.classList.toggle('night_mode')"></button>
+<button id="dev-button-platform" onclick="document.body.classList.toggle('mobile')"></button>
 </div>
 
+</div>
 </span>
 </html>
