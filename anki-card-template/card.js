@@ -205,6 +205,31 @@ function parseDefinitions(nodes) {
 	return HTMLtoParseArr(out);
 }
 
+function parseScript(nodes) {
+	for (var node of nodes) {
+		if (node.type == "html") continue;
+		if (node.data.length == 0) continue;
+
+		var lastScript = "unknown";
+		var input = node.data;
+		var out = "";
+		for (var i = 0; i < input.length; i++) {
+			var script = "unknown";
+			if (!charNotJapanese(input[i])) script = "japanese";
+			if (!charNotLatin(input[i])) script = "latin";
+
+			if (i == 0) out += `<span class="script-${script}">`;
+			else if (script != lastScript) out += `</span><span class="script-${script}">`;
+
+			out += input[i];
+			lastScript = script;
+		}
+		out += "</span>";
+		node.data = out;
+	}
+	return HTMLtoParseArr(nodes.map(n => n.data).join("")); // re-parse for newly created html
+}
+
 HTMLElement.prototype.parse = function() {
 	if (this.classList.contains("parsed")) return; // ignore already parsed elements
 	var input = this.innerHTML; // get raw data from anki field
@@ -217,6 +242,7 @@ HTMLElement.prototype.parse = function() {
 	if (this.classList.contains("parse-indicators")) nodes = parseIndicators(nodes);
 	if (this.classList.contains("parse-tags")) nodes = parseTags(nodes);
 	if (this.classList.contains("parse-definitions")) nodes = parseDefinitions(nodes);
+	if (this.classList.contains("parse-script")) nodes = parseScript(nodes);
 
 	// join parsed text with unmodified html
 	var out = nodes.map(n => n.data).join("");

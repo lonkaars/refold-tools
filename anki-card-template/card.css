@@ -224,6 +224,7 @@ body {
 	font-size: var(--subtile-font-size);
 	vertical-align: baseline;
 }
+.subtile .script-japanese { font-style: normal; } /* italic japanese looks weird */
 
 /* word note style */
 #card #target-word-reading .kanji { position: relative; }
