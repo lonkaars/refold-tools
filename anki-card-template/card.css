@@ -132,9 +132,9 @@ body {
 #card.vertical-layout #sentence { writing-mode: vertical-rl; }
 
 /* max text column width (~30 characters in japanese, ~50 in latin) */
-#card.vertical-layout #sentence { max-height: var(--max-column-width); }
-#card.horizontal-layout span,
-#card.vertical-layout #back span {
+#card.vertical-layout > #front > #sentence { max-height: var(--max-column-width); }
+#card.horizontal-layout > * > span,
+#card.vertical-layout > #back > span {
 	max-width: var(--max-column-width);
 	margin-left: auto;
 	margin-right: auto;
@@ -192,6 +192,7 @@ body {
 	min-width: 0;
 	user-select: none;
 	cursor: default;
+	margin: 0 auto;
 }
 
 /* tag hover/hold expand */
@@ -270,3 +271,13 @@ body {
 	background-color: currentColor;
 	transform: translateX(-100%);
 }
+
+/* indicator (pitch accent or word type) */
+.indicator {
+	display: inline-block;
+	padding: 1px 4px;
+	margin: 0 0.25em;
+	border-radius: 3px;
+	border: 1px solid currentColor;
+}
+#target-word-translation .indicator { opacity: 50%; }

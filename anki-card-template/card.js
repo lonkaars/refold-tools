@@ -68,14 +68,40 @@ function parseFormat(nodes) {
 			// escape characters preceded by \
 			if (input[i] == "\\") {
 				var escaped = input[i+1];
-				if (escaped == "n") escaped = "<br>"; // newline
-				if (escaped == "t") escaped = "\t"; // tab
-				out += escaped; i++; continue;
+				if (escaped == "n") { out += "<br>"; i++; continue; } // newline
+				if (escaped == "t") { out += "\t"; i++; continue; } // tab
+				if (escaped == "*") { out += "*"; i++; continue; } // tab
+				if (escaped == "_") { out += "_"; i++; continue; } // tab
 			}
 			// parse *test* into <b>test</b>
 			if (input[i] == "*") { bold = !bold; out += `<${bold ? "" : "/"}b>`; continue; }
 			// parse _test_ into <i>test</i>
 			if (input[i] == "_") { italic = !italic; out += `<${italic ? "" : "/"}i>`; continue; }
+
+			out += input[i];
+		}
+		node.data = out;
+	}
+	return HTMLtoParseArr(nodes.map(n => n.data).join("")); // re-parse for newly created html
+}
+
+function parseIndicators(nodes) {
+	for (var node of nodes) {
+		if (node.type == "html") continue;
+
+		var input = node.data;
+		var indicator = false; // indicator is open
+		var out = "";
+		for (var i = 0; i < input.length; i++) {
+			// escape characters preceded by \
+			if (input[i] == "\\") {
+				var escaped = input[i+1];
+				if (escaped == "[") { out += "["; i++; continue; }
+				if (escaped == "]") { out += "]"; i++; continue; }
+			}
+
+			if (input[i] == "[") { indicator = true; out += `<span class="indicator">`; continue; }
+			if (input[i] == "]" && indicator) { indicator = false; out += `</span>`; continue; }
 
 			out += input[i];
 		}
@@ -123,7 +149,7 @@ function parseFurigana(nodes) {
 	return HTMLtoParseArr(nodes.map(n => n.data).join("")); // re-parse for newly created html
 }
 
-function parseBrackets(nodes) {
+function parseReading(nodes) {
 	for (var node of nodes) {
 		if (node.type == "html") continue;
 
@@ -187,7 +213,8 @@ HTMLElement.prototype.parse = function() {
 	// parsers
 	if (this.classList.contains("parse-format")) nodes = parseFormat(nodes);
 	if (this.classList.contains("parse-furigana")) nodes = parseFurigana(nodes);
-	if (this.classList.contains("parse-brackets")) nodes = parseBrackets(nodes);
+	if (this.classList.contains("parse-reading")) nodes = parseReading(nodes);
+	if (this.classList.contains("parse-indicators")) nodes = parseIndicators(nodes);
 	if (this.classList.contains("parse-tags")) nodes = parseTags(nodes);
 	if (this.classList.contains("parse-definitions")) nodes = parseDefinitions(nodes);
 
