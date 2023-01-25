@@ -227,6 +227,10 @@ function parseScript(nodes) {
 	return HTMLtoParseArr(nodes.map(n => n.data).join("")); // re-parse for newly created html
 }
 
+function setSpoiler(nodes) {
+	return HTMLtoParseArr(`<span class="inner">` + nodes.map(n => n.data).join("") + "</span>");
+}
+
 HTMLElement.prototype.parse = function() {
 	if (this.classList.contains("parsed")) return; // ignore already parsed elements
 	var input = this.innerHTML; // get raw data from anki field
@@ -240,6 +244,7 @@ HTMLElement.prototype.parse = function() {
 	if (this.classList.contains("parse-tags")) nodes = parseTags(nodes);
 	if (this.classList.contains("parse-definitions")) nodes = parseDefinitions(nodes);
 	if (this.classList.contains("parse-script")) nodes = parseScript(nodes);
+	if (this.classList.contains("spoiler")) nodes = setSpoiler(nodes);
 
 	// join parsed text with unmodified html
 	var out = nodes.map(n => n.data).join("");

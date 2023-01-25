@@ -81,16 +81,19 @@ body {
 #card #back #sentence-translation { margin-top: 2em; }
 
 /* blur spoiler */
-.spoiler {
-	cursor: pointer;
+.spoiler { cursor: pointer; }
+.spoiler .inner {
+	display: inline-block;
+	margin: 0 auto;
 	position: relative;
+	padding: var(--spoiler-blur-padding);
 }
-.spoiler.hidden::after { backdrop-filter: blur(1rem) contrast(80%); }
-.spoiler.visible::after { backdrop-filter: blur(0rem); }
-.spoiler::after {
+.spoiler.hidden .inner::after { backdrop-filter: blur(1rem) contrast(80%); }
+.spoiler.visible .inner::after { backdrop-filter: blur(0rem); }
+.spoiler .inner::after {
 	content: "";
 	position: absolute;
-	inset: calc(-1 * var(--spoiler-blur-padding)) calc(var(--text-block-padding) - var(--spoiler-blur-padding));
+	inset: 0;
 	transition: backdrop-filter var(--spoiler-transition);
 	border-radius: 8px;
 }
