@@ -1,3 +1,11 @@
+define(`EXEC',`translit(esyscmd($1),`
+')')dnl
+define(`TIMESTAMP',EXEC(`date'))dnl
+define(`VERSION',EXEC(`git describe --tags'))dnl
+<!-- lonkaars anki card template version VERSION()
+     generated at TIMESTAMP()
+     https://git.pipeframe.xyz/lonkaars/refold-tools -->
+
 <div id="card" class="CARD_SIDE() vertical-layout">
 <div id="front">
 <span id="sentence" class="parse parse-furigana parse-format foreign">{{Complete sentence}}</span>
