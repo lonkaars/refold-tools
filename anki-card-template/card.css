@@ -1,3 +1,28 @@
+/* global parameters */
+#card {
+	--max-column-width: 30em; /* max column width for text (~30 kana / ~50 latin characters) */
+	--spoiler-transition: 300ms; /* spoiler hide/unhide transition duration */
+	--tag-transition: 300ms; /* tag hover/tap expand transition duration */
+	--separator-opacity: 20%; /* opacity of the answer separator */
+	--separator-weight: 2px; /* layout-dependent width/height of separator */
+	--spoiler-blur-padding: 4px; /* padding for the spoiler blur box */
+	--text-block-padding: 1em; /* layout-dependent horizontal/vertical padding for text blocks  */
+	--text-block-margin: 0.5em; /* layout-dependent horizontal/vertical margin for text blocks */
+	--tag-font-size: 80%; /* font size for card tags */
+	--subtile-font-size: 75%; /* font size for subtile style (notes, curly braces in translations) */
+	--subtile-opacity: 50%; /* font opacity for subtile style */
+	--reading-kana-font-size: 1rem; /* font size of kana in reading field */
+	--native-font-size: 1.0rem; /* font size for generic native (latin) text */
+	--foreign-font-size: 1.5rem; /* font size for generic foreign (japanese) text */
+	--definition-marker-width: 2px; /* definition marker width (mobile vertical only) */
+	--definition-marker-opacity: 50%; /* definition marker opacity (mobile vertical only) */
+}
+.mobile #card {
+	--text-block-padding: 0.5em;
+	--native-font-size: 1.25rem;
+	--foreign-font-size: 1.75rem;
+}
+
 /* default fonts */
 body {
 	font-family: "Inter", "Hiragino Kaku Gothic ProN", sans-serif;
@@ -25,13 +50,9 @@ body {
 	justify-content: center;
 }
 
-/* default font sizes (mobile) */
-.mobile #card .foreign { font-size: 1.75rem; }
-.mobile #card .native { font-size: 1.25rem; }
-
 /* default font sizes (desktop) */
-#card .foreign { font-size: 1.5rem; }
-#card .native { font-size: 1.0rem; }
+#card .foreign { font-size: var(--foreign-font-size); }
+#card .native { font-size: var(--native-font-size); }
 
 /* default text alignment and layout */
 #card { text-align: center; }
@@ -40,17 +61,14 @@ body {
 /* separator defaults */
 #separator {
 	border: none;
-	opacity: 20%;
+	opacity: var(--separator-opacity);
 	margin: 0;
+	background-color: currentColor;
 }
 
-/* separator color */
-#separator { background-color: black; }
-.night_mode #separator { background-color: white; }
-
 /* separator size */
-#card.horizontal-layout #separator { height: 10px; }
-#card.vertical-layout #separator { width: 10px; }
+#card.horizontal-layout #separator { height: var(--separator-weight); }
+#card.vertical-layout #separator { width: var(--separator-weight); }
 
 /* hide answer and separator on card front */
 #card.front #back,
@@ -64,11 +82,18 @@ body {
 
 /* blur spoiler */
 .spoiler {
-	transition: filter 300ms;
 	cursor: pointer;
+	position: relative;
 }
-.spoiler.hidden { filter: blur(0.3rem); }
-.spoiler.visible { filter: blur(0rem); }
+.spoiler.hidden::after { backdrop-filter: blur(1rem) contrast(80%); }
+.spoiler.visible::after { backdrop-filter: blur(0rem); }
+.spoiler::after {
+	content: "";
+	position: absolute;
+	inset: calc(-1 * var(--spoiler-blur-padding)) calc(var(--text-block-padding) - var(--spoiler-blur-padding));
+	transition: backdrop-filter var(--spoiler-transition);
+	border-radius: 8px;
+}
 
 /* fill display horizontally or vertically */
 #card.horizontal-layout { width: 100vw; }
@@ -95,25 +120,22 @@ body {
 /* default text element spacing */
 #card.horizontal-layout > * > span,
 #card.vertical-layout > #back > span {
-	padding: 0 1em;
-	margin: 0.5em auto;
+	padding: 0 var(--text-block-padding);
+	margin: var(--text-block-margin) auto;
 }
 #card.vertical-layout #sentence {
-	padding: 1em 0;
-	margin: auto 0.5em;
+	padding: var(--text-block-padding) 0;
+	margin: auto var(--text-block-margin);
 }
-/* mobile spacing */
-.mobile #card.horizontal-layout > * > span,
-.mobile #card.vertical-layout > #back > span { padding: 0 0.5em; }
 
 /* vertical japanese text only in sentence */
 #card.vertical-layout #sentence { writing-mode: vertical-rl; }
 
 /* max text column width (~30 characters in japanese, ~50 in latin) */
-#card.vertical-layout #sentence { max-height: 30em; }
+#card.vertical-layout #sentence { max-height: var(--max-column-width); }
 #card.horizontal-layout span,
 #card.vertical-layout #back span {
-	max-width: 30em;
+	max-width: var(--max-column-width);
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -121,12 +143,12 @@ body {
 /* display kana reading smaller and below kanji in vertical layout */
 #card.vertical-layout #target-word-reading .reading {
 	display: block;
-	font-size: 1rem;
+	font-size: var(--reading-kana-font-size);
 }
 
 /* tag container */
 #card #back #tags {
-	font-size: 80%;
+	font-size: var(--tag-font-size);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -136,7 +158,7 @@ body {
 	max-width: unset;
 	padding: 10px;
 	opacity: 60%;
-	transition: opacity 0.3s;
+	transition: opacity var(--tag-transition);
 }
 
 /* tag style */
@@ -150,7 +172,7 @@ body {
 	border-radius: 999px;
 	margin: 0;
 	transition-property: padding, grid-template-rows, grid-template-columns;
-	transition-duration: 0.3s;
+	transition-duration: var(--tag-transition);
 	overflow: hidden;
 	display: grid;
 	grid-template-rows: 0fr;
@@ -163,7 +185,7 @@ body {
 	opacity: 0;
 	left: 50%;
 	transform: translate(-50%, 0%);
-	transition-duration: 0.3s;
+	transition-duration: var(--tag-transition);
 	transition-property: opacity, transform;
 	white-space: nowrap;
 	min-height: 0;
@@ -197,8 +219,8 @@ body {
 /* subtile style */
 .subtile {
 	font-style: italic;
-	opacity: 50%;
-	font-size: 75%;
+	opacity: var(--subtile-opacity);
+	font-size: var(--subtile-font-size);
 	vertical-align: baseline;
 }
 
@@ -236,10 +258,15 @@ body {
 	margin: 0 auto;
 }
 .mobile #card.vertical-layout #target-word-translation .definitions .definition::before {
-	content: "\00b7"; /* interpunct */
+	content: "";
 	position: absolute;
 	left: -0.25em;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	font-size: 150%;
+	top: 0px;
+	bottom: 0px;
+	width: var(--definition-marker-width);
+	opacity: var(--definition-marker-opacity);
+	margin: 5px 0;
+	border-radius: 999px;
+	background-color: currentColor;
+	transform: translateX(-100%);
 }
