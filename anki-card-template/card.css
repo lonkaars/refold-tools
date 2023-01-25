@@ -84,21 +84,26 @@ body {
 
 /* blur spoiler */
 .spoiler { cursor: pointer; }
-.spoiler .inner {
-	display: inline-block;
+.spoiler .outer {
 	margin: 0 auto;
+	display: inline-block;
 	position: relative;
+	border-radius: 8px;
+	overflow: hidden;
 	padding: var(--spoiler-blur-padding);
 }
-.spoiler.hidden .inner::after { backdrop-filter: blur(1rem) contrast(80%); }
-.spoiler.visible .inner::after { backdrop-filter: blur(0rem); }
-.spoiler .inner::after {
+.spoiler .outer::after {
 	content: "";
 	position: absolute;
 	inset: 0;
-	transition: backdrop-filter var(--spoiler-transition);
-	border-radius: 8px;
 }
+.spoiler .inner { transition: filter var(--spoiler-transition); }
+.spoiler.hidden .inner { filter: blur(0.6rem); }
+.spoiler.visible .inner { filter: blur(0rem); }
+.spoiler .outer::after { transition: backdrop-filter var(--spoiler-transition); }
+.spoiler.hidden .outer::after { backdrop-filter: contrast(80%); }
+.spoiler.visible .outer::after { backdrop-filter: contrast(100%); }
+
 
 /* fill display horizontally or vertically */
 #card.horizontal-layout { width: 100vw; }
@@ -285,7 +290,7 @@ body {
 	display: inline-block;
 	padding: 1px 4px;
 	margin: 0 0.25em;
-	border-radius: 3px;
-	border: 1px solid currentColor;
+	border-radius: 4px;
+	border: 1.2pt solid currentColor;
 }
 #target-word-translation .indicator { opacity: 50%; }

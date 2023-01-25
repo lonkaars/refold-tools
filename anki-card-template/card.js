@@ -262,7 +262,7 @@ function parseScript(nodes) {
 }
 
 function setSpoiler(nodes) {
-	return HTMLtoParseArr(`<span class="inner">` + nodes.map(n => n.data).join("") + "</span>");
+	return HTMLtoParseArr(`<span class="outer"><span class="inner">` + nodes.map(n => n.data).join("") + "</span></span>");
 }
 
 HTMLElement.prototype.parse = function() {
