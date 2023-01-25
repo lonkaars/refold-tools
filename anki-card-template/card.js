@@ -23,20 +23,17 @@ function calculateTagHue(input) {
 
 function HTMLtoParseArr(input) {
 	var out = [];
-	var node = { data: "", type: "text", latin: false, japanese: false };
+	var node = { data: "", type: "text" };
 	var tag_open = false;
 	var new_node = false;
 
 	var clear = () => {
 		out.push(node);
-		node = { data: "", type: "text", latin: false, japanese: false };
+		node = { data: "", type: "text" };
 	};
 
 	for (var i = 0; i < input.length; i++) {
 		new_node = false;
-		if (!charNotJapanese(input[i])) node.japanese = true;
-		if (!charNotLatin(input[i])) node.latin = true;
-
 		if (input[i] == "<") {
 			clear();
 			tag_open = true;
