@@ -192,13 +192,47 @@ function parseTags(nodes) {
 }
 
 function parseDefinitions(nodes) {
-	out = `<ul class="definitions">`;
-	out += nodes.map(n => n.data).join("").split(",")
-		.map(s => s.trim())
-		.map(s => s.replace(/{(.+)}/g, `<span class="subtile">$1</span>`)) // {note}
-		.map(s => `<li class="definition">${s}</li>`)
-		.join(`<li class="definition-separator"></li>`);
-	out += `</ul>`;
+	out = `<ul class="definitions"><li class="definition">`;
+	var subtile = false; // current text is subtile
+	var parenthesis = false; // current text is surrounded by parenthesis
+
+	for (var node of nodes) {
+		if (node.type == "html") {
+			out += node.data;
+			continue;
+		}
+
+		var input = node.data;
+		for (var i = 0; i < input.length; i++) {
+			// escape characters preceded by \
+			if (input[i] == "\\") {
+				var escaped = input[i+1];
+				if (escaped == "{") { out += "{"; i++; continue; }
+				if (escaped == "}") { out += "}"; i++; continue; }
+				if (escaped == ",") { out += ","; i++; continue; }
+				if (escaped == "(") { out += "("; i++; continue; }
+				if (escaped == ")") { out += ")"; i++; continue; }
+			}
+
+			// subtile brackets
+			if (input[i] == "{") { subtile = true; out += `<span class="subtile">`; continue; }
+			if (input[i] == "}" && subtile) { subtile = false; out += `</span>`; continue; }
+
+			// definition separator
+			if (input[i] == "," && !subtile && !parenthesis) {
+				out += `</li><li class="definition-separator"></li><li class="definition">`;
+				continue;
+			}
+
+			// ignore comma's starting new definition in parenthesis
+			if (input[i] == "(") parenthesis = true;
+			if (input[i] == ")") parenthesis = false;
+
+			out += input[i];
+		}
+	}
+
+	out += `</li></ul>`;
 	return HTMLtoParseArr(out);
 }
 
