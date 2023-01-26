@@ -284,7 +284,8 @@ HTMLElement.prototype.parse = function() {
 	var out = nodes.map(n => n.data).join("");
 	this.innerHTML = out;
 	this.classList.add("parsed");
-	if (out.length == 0) this.classList.add("empty");
+	if (nodes.reduce((current, n) => current + (n.type == "text" ? n.data.length : 0), 0) == 0)
+		this.classList.add("empty"); // if innerHTML only contains empty html (no 'user' text)
 };
 
 function layout() {

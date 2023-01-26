@@ -32,9 +32,9 @@ body {
 	font-weight: 400;
 }
 
-#card #sentence { color: #000b; }
+#card #sentence:has(b) { color: #000b; }
 #card #sentence b { color: #000f; }
-.night_mode #card #sentence { color: #fffb; }
+.night_mode #card #sentence:has(b) { color: #fffb; }
 .night_mode #card #sentence b { color: #ffff; }
 
 /* body margin */
