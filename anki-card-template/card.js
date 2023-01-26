@@ -53,11 +53,16 @@ function HTMLtoParseArr(input) {
 	return out;
 }
 
-function parseFormat(nodes) {
+function parseOnTextOnly(nodes, parseFn) {
 	for (var node of nodes) {
 		if (node.type == "html") continue;
+		node.data = parseFn(node.data);
+	}
+	return HTMLtoParseArr(nodes.map(n => n.data).join("")); // re-parse for newly created html
+}
 
-		var input = node.data;
+function parseFormat(nodes) {
+	return parseOnTextOnly(nodes, input => {
 		var bold = false; // currently bold
 		var italic = false; // currently italic
 		var out = "";
@@ -77,16 +82,12 @@ function parseFormat(nodes) {
 
 			out += input[i];
 		}
-		node.data = out;
-	}
-	return HTMLtoParseArr(nodes.map(n => n.data).join("")); // re-parse for newly created html
+		return out;
+	});
 }
 
 function parseIndicators(nodes) {
-	for (var node of nodes) {
-		if (node.type == "html") continue;
-
-		var input = node.data;
+	return parseOnTextOnly(nodes, input => {
 		var indicator = false; // indicator is open
 		var content = ""; // indicator content
 		var stamp = ""; // filled if indicator has stamp
@@ -114,16 +115,12 @@ function parseIndicators(nodes) {
 			if (indicator) content += input[i];
 			else out += input[i];
 		}
-		node.data = out;
-	}
-	return HTMLtoParseArr(nodes.map(n => n.data).join("")); // re-parse for newly created html
+		return out;
+	});
 }
 
 function parseFurigana(nodes) {
-	for (var node of nodes) {
-		if (node.type == "html") continue;
-
-		var input = node.data;
+	return parseOnTextOnly(nodes, input => {
 		var mode = "normal"; // normal, kanji, reading
 		var out = ""; // output html
 		var alwaysvisisble = false; // if furigana is always visible (on front of card)
@@ -153,16 +150,12 @@ function parseFurigana(nodes) {
 			if (mode == "kanji") kanji += input[i];
 			if (mode == "reading") reading += input[i];
 		}
-		node.data = out;
-	}
-	return HTMLtoParseArr(nodes.map(n => n.data).join("")); // re-parse for newly created html
+		return out;
+	});
 }
 
 function parseReading(nodes) {
-	for (var node of nodes) {
-		if (node.type == "html") continue;
-
-		var input = node.data;
+	return parseOnTextOnly(nodes, input => {
 		var note_head = 0;
 		var note_tail = 0;
 		var out = ""; // output html
@@ -191,9 +184,8 @@ function parseReading(nodes) {
 
 			out += input[i];
 		}
-		node.data = out;
-	}
-	return HTMLtoParseArr(nodes.map(n => n.data).join("")); // re-parse for newly created html
+		return out;
+	});
 }
 
 function parseTags(nodes) {
@@ -249,12 +241,10 @@ function parseDefinitions(nodes) {
 }
 
 function parseScript(nodes) {
-	for (var node of nodes) {
-		if (node.type == "html") continue;
-		if (node.data.length == 0) continue;
+	return parseOnTextOnly(nodes, input => {
+		if (input.length == 0) return input;
 
 		var lastScript = "unknown";
-		var input = node.data;
 		var out = "";
 		for (var i = 0; i < input.length; i++) {
 			var script = "unknown";
@@ -267,10 +257,8 @@ function parseScript(nodes) {
 			out += input[i];
 			lastScript = script;
 		}
-		out += "</span>";
-		node.data = out;
-	}
-	return HTMLtoParseArr(nodes.map(n => n.data).join("")); // re-parse for newly created html
+		return out + "</span>";
+	});
 }
 
 function setSpoiler(nodes) {
