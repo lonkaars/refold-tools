@@ -3,9 +3,15 @@
 work in progress
 
 this is an anki card template for sentence mining. it has fields for a foreign
-sentence, foreign word, translated word and an optional translated sentence. it
-supports a markdown-like [syntax](#syntax) for adding furigana that is visible
-on either both sides or only on the back side.
+sentence, foreign word reading, translated word and an optional translated
+sentence. it has built-in parsers for adding markdown-like styling, furigana
+that is visible on either both sides or only on the back side, spoilers,
+definition context hints, and word type indicators. it supports a vertical and
+horizontal layout, desktop and mobile, as well as light and dark themes.
+
+> currently, some css is slightly broken on the desktop version of anki, but
+> this should be fixed as qt merges a newer version of chromium (>= 105) into
+> the QTWebview library. this does not affect useability
 
 ## example
 
@@ -13,39 +19,17 @@ on either both sides or only on the back side.
 
 |Field|Value|
 |-|-|
-|Complete sentence|`[家](うち)の{主}(あるじ)を*なめるなよ*…`|
-|Target word reading|`舐める【なめる】`|
-|Target word translation|`To underestimate`|
-|Complete sentence translation|`Don't underestimate the master of the house...`|
+|Complete sentence|`*ハンパなく*[鍛](きた)えてやるから[覚悟](かくご)するゴロ！`|
+|Target word reading|`半端ない【はん・ぱ・ない】(uk)`|
+|Target word translation|`[い-adj] extreme, impressive, staggering {of height}`|
+|Complete sentence translation|`I'm going to train you like crazy, so be prepared!`|
+|Tags|`ゼルダの伝説 ブレス・オブ・ザ・ワイルド`|
 
-### front
+### output
 
-<div class="card front" align="center" style="border: solid 2px gray; padding: 10px;">
-<span class="sentence parsed">家の<ruby>主<rt class="visible">あるじ</rt></ruby>を<b>なめるなよ</b>…</span>
-</div>
-
-### back
-
-<div class="card back" align="center" style="border: solid 2px gray; padding: 10px;">
-<span class="sentence parsed"><ruby>家<rt class="hidden">うち</rt></ruby>の<ruby>主<rt class="visible">あるじ</rt></ruby>を<b>なめるなよ</b>…</span>
-<hr class="split">
-<span class="target-word-reading">舐める【なめる】</span><br>
-<span class="target-word-translation">To underestimate</span><br>
-<span class="sentence-translation">Don't underestimate the master of the house...</span>
-</div>
-
-## syntax
-
-html is passed through, so inline styling (should) still work.
-
-|input|html output|example|
+|![](../assets/card-front.png)|![](../assets/card-back-hidden.png)|![](../assets/card-back-visible.png)|
 |-|-|-|
-|`[kanji](furigana)`|`<ruby>kanji<rt>furigana</rt></ruby>`<br>(furigana visible on back side only)|<ruby>kanji<rt>furigana</rt></ruby>|
-|`{kanji}(furigana)`|`<ruby>kanji<rt>furigana</rt></ruby>`<br>(furigana visible on both sides)|<ruby>kanji<rt>furigana</rt></ruby>|
-|`*text*`|`<b>text</b>` (bold)|<b>text</b>|
-|`a\nb`|`a<br>b` (line break)|a<br>b|
-|`\\`|`\` (backslash)|\\|
-|`\[escaped](this)`|`[escaped](this)` (escaped furigana)|\[escaped](this)|
+|front|back|spoiler & tag|
 
 ## set-up
 
@@ -76,4 +60,126 @@ documentation](https://docs.ankiweb.net/templates/styling.html#night-mode)
 suggests that the night mode CSS class is called `nightMode` instead of
 `night_mode`, but `night_mode` works fine on desktop too, so is used in this
 card template.
+
+## syntax
+
+parsing behavior is controlled using html classes. if two parsers check for the
+same character, they likely cannot be used simultaneously. here are the default
+classes for this template:
+
+|card field|classes|
+|-|-|
+|sentence|[`parse`](#parse) [`parse-furigana`](#parse-furigana) [`parse-format`](#parse-format) [`foreign`](#foreign)|
+|target word reading|[`parse`](#parse) [`parse-format`](#parse-format) [`parse-reading`](#parse-reading) [`parse-indicators`](#parse-indicators) [`parse-script`](#parse-script) [`foreign`](#foreign)|
+|target word translation|[`parse`](#parse) [`parse-format`](#parse-format) [`parse-definitions`](#parse-definitions) [`parse-indicators`](#parse-indicators) [`parse-script`](#parse-script) [`native`](#native)|
+|sentence translation|[`parse`](#parse) [`parse-format`](#parse-format) [`native`](#native) [`spoiler`](#spoiler) [`parse-script`](#parse-script) [`hidden`](#hidden)|
+|tags|[`parse`](#parse) [`parse-tags`](#parse-tags)|
+
+### parse
+
+enables parsing for element. if a parser has a character sensitivity list, a
+backslash can be used to insert the literal character instead.
+
+### parse-format
+
+parse bold and italic style, and convert `\n` and `\t` into newline and tab
+characters.
+
+examples:
+
+|input|output|
+|-|-|
+|`*bold*`|<b>bold</b>|
+|`_italic_`|<i>italic</i>|
+|`\t`|(literal tab character)|
+|`\n`|html `<br>`|
+
+sensitive to the following characters: `[](){}`
+
+### parse-furigana
+
+parse furigana between square or curly brackets immediately followed by reading
+between parenthesis.
+
+examples:
+
+|input|output|
+|-|-|
+|`[漢字](かんじ)`|<ruby>漢字<rt>かんじ</rt></ruby> (furigana visible on back side only)|
+|`{漢字}(かんじ)`|<ruby>漢字<rt>かんじ</rt></ruby> (furigana visible on both sides)|
+
+sensitive to the following characters: `[](){}`
+
+### parse-definitions
+
+parse list of definitions separated by commas, and convert text between curly
+brackets to subtile text. commas do not start a new definition inside subtile
+text and parenthesis, and are inserted normally.
+
+example:
+
+|input|output|
+|-|-|
+|`word {subtile, or is it} (this is, a single item)\, and still is here, but not here`|<ul><li>word <i style="font-size: 70%">subtile, or is it</i> (this is, a single item), and still is here</li><li>but not here</li></ul>|
+
+in desktop horizontal, desktop vertical, and mobile horizontal layouts,
+definitions are displayed on a single line, separated by a comma. in the
+vertical mobile layout, items are separated by a short bar, and displayed in a
+vertical list.
+
+sensitive to the following characters: `{}(),`
+
+### parse-indicators
+
+parse indicators between square brackets. indicator "stamp" can be added by
+suffixing the stamp with a dash character.
+
+examples:
+
+|input|output|
+|-|-|
+|`[adj]`|![](../assets/indicator-default.png)|
+|`[な-adj]`|![](../assets/indicator-stamp.png)|
+|`[な\-adj]`|![](../assets/indicator-nostamp.png)|
+
+sensitive to the following characters: `[]-`
+
+### parse-reading
+
+parse reading field. start of input is tagged with class `kanji`, everything
+between lenticular brackets is tagged with class `reading`, note can be added
+with regular parenthesis (for marking if word is usually written as kanji).
+
+sensitive to the following characters: `【】()` (and line start)
+
+### parse-script
+
+parse text into `span` elements with class `script-japanese` or `script-latin`
+when a script switch is detected. used for forcing non-italic fonts for
+japanese text
+
+### parse-tags
+
+used on tags element only. separates tags by space.
+
+### foreign
+
+mark element as having foreign (japanese) text by default (slightly larger font
+size for lcd's)
+
+### native
+
+mark element as having native (latin) text by default (default font size)
+
+### spoiler
+
+enables spoiler behavior for element (requires [`parse`](#parse) class to work)
+
+### hidden
+
+set element with [`spoiler`](#spoiler) class to be hidden by default
+
+### visible
+
+set element with [`spoiler`](#spoiler) class to be visible by default
 

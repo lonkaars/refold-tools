@@ -72,8 +72,9 @@ function parseFormat(nodes) {
 				var escaped = input[i+1];
 				if (escaped == "n") { out += "<br>"; i++; continue; } // newline
 				if (escaped == "t") { out += "\t"; i++; continue; } // tab
-				if (escaped == "*") { out += "*"; i++; continue; } // tab
-				if (escaped == "_") { out += "_"; i++; continue; } // tab
+				if (escaped == "*") { out += "*"; i++; continue; } // bold
+				if (escaped == "_") { out += "_"; i++; continue; } // italic
+				if (escaped == "\\") { out += "\\"; i++; continue; } // literal backslash
 			}
 			// parse *test* into <b>test</b>
 			if (input[i] == "*") { bold = !bold; out += `<${bold ? "" : "/"}b>`; continue; }
@@ -99,6 +100,7 @@ function parseIndicators(nodes) {
 				if (escaped == "[") { out += "["; i++; continue; }
 				if (escaped == "]") { out += "]"; i++; continue; }
 				if (escaped == "-" && indicator) { content += "-"; i++; continue; }
+				if (escaped == "\\") { out += "\\"; i++; continue; }
 			}
 
 			if (input[i] == "[") { indicator = true; out += `<span class="indicator">`; continue; }
@@ -216,6 +218,7 @@ function parseDefinitions(nodes) {
 				if (escaped == ",") { out += ","; i++; continue; }
 				if (escaped == "(") { out += "("; i++; continue; }
 				if (escaped == ")") { out += ")"; i++; continue; }
+				if (escaped == "\\") { out += "\\"; i++; continue; }
 			}
 
 			// subtile brackets
