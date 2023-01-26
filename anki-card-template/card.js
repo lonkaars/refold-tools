@@ -88,6 +88,8 @@ function parseIndicators(nodes) {
 
 		var input = node.data;
 		var indicator = false; // indicator is open
+		var content = ""; // indicator content
+		var stamp = ""; // filled if indicator has stamp
 		var out = "";
 		for (var i = 0; i < input.length; i++) {
 			// escape characters preceded by \
@@ -95,12 +97,22 @@ function parseIndicators(nodes) {
 				var escaped = input[i+1];
 				if (escaped == "[") { out += "["; i++; continue; }
 				if (escaped == "]") { out += "]"; i++; continue; }
+				if (escaped == "-" && indicator) { content += "-"; i++; continue; }
 			}
 
 			if (input[i] == "[") { indicator = true; out += `<span class="indicator">`; continue; }
-			if (input[i] == "]" && indicator) { indicator = false; out += `</span>`; continue; }
+			if (input[i] == "]" && indicator) {
+				indicator = false;
+				if (stamp) out += `<span class="stamp">${stamp}</span>`;
+				out += `${content}</span>`;
+				content = "";
+				stamp = "";
+				continue;
+			}
+			if (input[i] == "-" && indicator) { stamp = content; content = ""; continue; }
 
-			out += input[i];
+			if (indicator) content += input[i];
+			else out += input[i];
 		}
 		node.data = out;
 	}

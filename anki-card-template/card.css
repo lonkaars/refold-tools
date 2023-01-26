@@ -11,7 +11,7 @@
 	--tag-font-size: 80%; /* font size for card tags */
 	--subtile-font-size: 75%; /* font size for subtile style (notes, curly braces in translations) */
 	--subtile-opacity: 50%; /* font opacity for subtile style */
-	--reading-kana-font-size: 1rem; /* font size of kana in reading field */
+	--reading-kana-font-size: var(--native-font-size); /* font size of kana in reading field */
 	--native-font-size: 1.0rem; /* font size for generic native (latin) text */
 	--foreign-font-size: 1.5rem; /* font size for generic foreign (japanese) text */
 	--definition-spacing: 0.75em; /* definition spacing (mobile vertical only) */
@@ -21,7 +21,7 @@
 }
 .mobile #card {
 	--text-block-padding: 0.5em;
-	--native-font-size: 1.25rem;
+	--native-font-size: 1.10rem;
 	--foreign-font-size: 1.75rem;
 }
 
@@ -101,8 +101,19 @@ body {
 .spoiler.hidden .inner { filter: blur(0.6rem); }
 .spoiler.visible .inner { filter: blur(0rem); }
 .spoiler .outer::after { transition: backdrop-filter var(--spoiler-transition); }
-.spoiler.hidden .outer::after { backdrop-filter: contrast(80%); }
+.spoiler.hidden .outer::after { backdrop-filter: contrast(70%); }
 .spoiler.visible .outer::after { backdrop-filter: contrast(100%); }
+/* inline spoilers */
+.spoiler.inline {
+	overflow: hidden;
+	border-radius: 4px;
+	display: inline-block;
+	vertical-align: text-bottom;
+}
+.spoiler.inline .outer {
+	padding: 0;
+	display: inline;
+}
 
 
 /* fill display horizontally or vertically */
@@ -292,5 +303,37 @@ body {
 	margin: 0 0.25em;
 	border-radius: 4px;
 	border: 1.2pt solid currentColor;
+	vertical-align: middle;
 }
 #target-word-translation .indicator { opacity: 50%; }
+.indicator .script-japanese {
+	font-size: 90%;
+	vertical-align: middle;
+}
+.indicator .stamp * { line-height: 0; }
+.indicator:has(.stamp) > *:not(.stamp) { vertical-align: middle; }
+.indicator:has(.stamp) {
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: 0;
+}
+.indicator .stamp {
+	padding: 2px 4px;
+	margin: 1px;
+	margin-right: 3px;
+	border-radius: 2px;
+	font-weight: bold;
+	font-size: 90%;
+	vertical-align: top;
+	display: inline-block;
+}
+
+.indicator .stamp {
+	background-color: black;
+	color: white;
+}
+.night_mode .indicator .stamp {
+	background-color: white;
+	color: black;
+}
+
