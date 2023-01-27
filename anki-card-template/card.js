@@ -107,7 +107,7 @@ function parseIndicators(nodes) {
 			if (input[i] == "]" && indicator) {
 				indicator = false;
 				if (stamp) out += `<span class="stamp">${stamp}</span>`;
-				out += `${content}</span>`;
+				out += `<span class="content">${content}</span></span>`;
 				content = "";
 				stamp = "";
 				continue;

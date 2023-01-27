@@ -18,12 +18,13 @@
 	--definition-marker-width: 2em; /* definition marker width (mobile vertical only) */
 	--definition-marker-height: 2px; /* definition marker height (mobile vertical only) */
 	--definition-marker-opacity: 50%; /* definition marker opacity (mobile vertical only) */
-	--indicator-stroke-weight: 1.2pt; /* pitch accent / word type indicator stroke weight */
+	--indicator-stroke-weight: 1px; /* pitch accent / word type indicator stroke weight */
 }
 .mobile #card {
 	--text-block-padding: 0.5em;
 	--native-font-size: 1.10rem;
 	--foreign-font-size: 1.75rem;
+	--indicator-stroke-weight: 1.2pt;
 }
 
 /* default fonts */
@@ -32,6 +33,7 @@ body {
 	font-weight: 400;
 }
 
+/* increase contrast of highlighted word */
 #card #sentence:has(b) { color: #000b; }
 #card #sentence b { color: #000f; }
 .night_mode #card #sentence:has(b) { color: #fffb; }
@@ -297,13 +299,11 @@ body {
 	transform: translate(-50%, 50%);
 }
 
-/* indicator (pitch accent or word type) */
+/* indicator (word type + defaults) */
 .indicator {
 	position: relative;
 	display: inline-block;
-	padding: 1px 4px;
-	margin: 0 0.25em;
-	vertical-align: middle;
+	margin: 0.25em;
 	border: var(--indicator-stroke-weight) solid transparent;
 }
 .indicator::after {
@@ -312,27 +312,19 @@ body {
 	inset: calc(-1 * var(--indicator-stroke-weight));
 	border-radius: 4px;
 	border: var(--indicator-stroke-weight) solid currentColor;
+	z-index: -1;
 }
-.indicator .script-japanese {
-	font-size: 90%;
-	vertical-align: middle;
-}
-.indicator .stamp * { line-height: 0; }
-.indicator:has(.stamp) > *:not(.stamp) { vertical-align: middle; }
-.indicator:has(.stamp) {
-	padding-top: 0;
-	padding-bottom: 0;
-	padding-left: 0;
-}
+.indicator .script-japanese { font-size: 90%; }
+.indicator .content,
+.indicator .stamp { display: inline-block; }
+.indicator .content { margin: 1px 4px; }
 .indicator .stamp {
 	position: relative;
 	padding: 2px 4px;
 	margin: 1px;
-	margin-right: 3px;
 	font-weight: bold;
 	font-size: 90%;
-	vertical-align: top;
-	display: inline-block;
+	height: 100%;
 }
 .indicator .stamp::before {
 	content: "";
@@ -341,11 +333,37 @@ body {
 	border-radius: 2px;
 	z-index: -1;
 }
+.indicator .stamp * {
+	display: inline-block;
+}
+
+/* indicator (pitch accent pattern) */
+#target-word-reading .indicator::after { border: none; }
+#target-word-reading .indicator {
+	position: relative;
+	bottom: 1px; /* cancel out margin of .indicator > .content */
+	font-size: 80%;
+	font-weight: bold;
+	vertical-align: baseline;
+}
+#target-word-reading .indicator .content { margin: 1px 6px; }
+#target-word-reading .indicator::before {
+	border-radius: 6px;
+	content: "";
+	z-index: -1;
+	position: absolute;
+	inset: 0;
+	opacity: 70%;
+}
+
 
 /* theme colors */
+#target-word-reading .indicator,
 .indicator .stamp { color: white; }
-.indicator .stamp::before { background-color: black; }
-.night_mode #target-word-translation .indicator .stamp::before { background-color: white; opacity: 40%; }
+.indicator .stamp::before,
+#target-word-reading .indicator::before { background-color: black; }
+.night_mode #target-word-translation .indicator .stamp::before,
+.night_mode #target-word-reading .indicator::before { background-color: white; opacity: 40%; }
 
 /* grey color in definitions */
 #target-word-translation .indicator .stamp::before,
