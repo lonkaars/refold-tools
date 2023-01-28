@@ -128,8 +128,10 @@ function parseFurigana(nodes) {
 		var alwaysvisisble = false; // if furigana is always visible (on front of card)
 		var kanji = ""; // current kanji
 		var reading = ""; // current kanji reading
+		var normal = ""; // normal text
+		var flush_normal = () => { out += `<span class="normal">${normal}</span>`; normal = ""; };
 
-		for (var i = 0; i < input.length; i++) {
+		for (var i = 0; i < input.length; i++, lastmode = mode) {
 			// parse [kanji](reading) into ruby text
 			// [kanji](reading) is only visible on card back
 			// {kanji}(reading) is always visible
@@ -142,16 +144,18 @@ function parseFurigana(nodes) {
 			if (mode == "kanji" && kanji.length > 0 && input[i] == "(") // reading open
 			{ reading = ""; mode = "reading"; continue; }
 			if (mode == "reading" && input[i] == ")") { // reading close
+				flush_normal();
 				mode = "normal";
 				out += `<ruby>${kanji}<rt class="${alwaysvisisble ? 'visible' : 'hidden'}">${reading}</rt></ruby>`;
 				continue;
 			}
 
 			// add current character to selected mode buffer
-			if (mode == "normal") out += input[i];
+			if (mode == "normal") normal += input[i];
 			if (mode == "kanji") kanji += input[i];
 			if (mode == "reading") reading += input[i];
 		}
+		flush_normal();
 		return out;
 	});
 }
@@ -325,3 +329,5 @@ run();
 window.onload = () => run();
 window.onresize = () => layout();
 window.ondeviceorientation = () => layout();
+window.screen.orientation.onchange = () => layout();
+

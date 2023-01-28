@@ -19,6 +19,7 @@
 	--definition-marker-height: 2px; /* definition marker height (mobile vertical only) */
 	--definition-marker-opacity: 50%; /* definition marker opacity (mobile vertical only) */
 	--indicator-stroke-weight: 1px; /* pitch accent / word type indicator stroke weight */
+	--sentence-highlight-contrast: 80%; /* opacity of non-highlighted text in sentence */
 }
 .mobile #card {
 	--text-block-padding: 0.5em;
@@ -34,10 +35,8 @@ body {
 }
 
 /* increase contrast of highlighted word */
-#card #sentence:has(b) { color: #000b; }
-#card #sentence b { color: #000f; }
-.night_mode #card #sentence:has(b) { color: #fffb; }
-.night_mode #card #sentence b { color: #ffff; }
+#card #sentence:has(b) > * { opacity: var(--sentence-highlight-contrast); }
+#card #sentence > b { opacity: 100%; }
 
 /* body margin */
 body {
@@ -355,7 +354,6 @@ body {
 	inset: 0;
 	opacity: 70%;
 }
-
 
 /* theme colors */
 #target-word-reading .indicator,
