@@ -16,8 +16,8 @@ function exportWord() {
 		return out;
 	}
 	var kanji = addWord(false);
-	var reading = addWord(true)
-	var result = `${kanji}`
+	var reading = addWord(true);
+	var result = `${kanji}`;
 	if (hasKanji) result += `\u3010${reading}\u3011`;
 	else result += " ";
 
@@ -25,7 +25,7 @@ function exportWord() {
 
 	var pitchAccent = "";
 	for (var tag of entry.getElementsByClassName("pronunciation-downstep-notation-number")) {
-		pitchAccent = tag.innerText.trim()
+		pitchAccent = tag.innerText.trim();
 		break;
 	}
 	if (pitchAccent) tags.push(`[${pitchAccent}]`);
