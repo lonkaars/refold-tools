@@ -65,5 +65,5 @@ yomichan-chrome-patched.zip: clean patch
 	zip -qr $@ yomichan
 
 clean:
-	$(RM) -r sentence-export.min.js yomichan yomichan-chrome.zip yomichan-chrome-patched.zip
+	$(RM) -r sentence-export.min.js yomichan yomichan-chrome.zip yomichan-chrome-patched.zip info.html.diff
 
