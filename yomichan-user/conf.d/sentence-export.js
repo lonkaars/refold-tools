@@ -20,14 +20,23 @@ async function exportSentence() {
 	var inputHTML = document.getElementById("query-parser-content");
 	var output = "";
 
+	var selection = window.getSelection();
+	// TODO: fix right-to-left selected text
+
 	for (var child of inputHTML.children) {
 		for (var subchild of child.childNodes) {
 			if (subchild.nodeName == '#text') {
-				output += subchild.textContent;
+				for (var i in subchild.textContent) {
+					if (selection.anchorNode == subchild && i == selection.anchorOffset) output += "*";
+					output += subchild.textContent[i];
+					if (selection.focusNode == subchild && i == selection.focusOffset - 1) output += "*";
+				}
 				continue;
 			}
 			if (subchild.nodeName == 'RUBY') {
+				if (selection.anchorNode.parentNode.parentNode == subchild) output += "*";
 				output += `[${subchild.childNodes[0].innerText}](${subchild.childNodes[1].innerText})`;
+				if (selection.focusNode.parentNode.parentNode == subchild) output += "*";
 				continue;
 			}
 		}
