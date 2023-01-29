@@ -1,0 +1,17 @@
+--- yomichan-original/search.html	2022-10-30 12:39:42.000000000 +0100
++++ yomichan/search.html	2023-01-29 15:40:23.336897401 +0100
+@@ -16,6 +16,7 @@
+     <link rel="stylesheet" type="text/css" href="/css/display-pronunciation.css">
+     <link rel="stylesheet" type="text/css" href="/css/structured-content.css">
+     <link rel="stylesheet" type="text/css" href="/css/search.css">
++		<script defer src="/js/userscript-loader.js"></script>
+ </head>
+ <body>
+ 
+@@ -128,6 +129,5 @@
+ <script src="/js/templates/template-renderer-proxy.js"></script>
+ 
+ <script src="/js/display/search-main.js"></script>
+-
+ </body>
+ </html>

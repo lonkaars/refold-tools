@@ -1,0 +1,11 @@
+.icon[data-icon=script] { --icon-image: url(/images/script.svg); }
+
+#user-script-container {
+	display: flex;
+	flex-flow: column nowrap;
+}
+#user-script-header { font-size: var(--font-size-small); }
+#user-script-editor {
+	width: 100%;
+	flex: 1 1 auto;
+}

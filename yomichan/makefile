@@ -1,11 +1,23 @@
-all: sentence-export.min.js
+all:
 
-.PHONY: clean patch
+.PHONY: clean patch download backup
 
 include ../common.mk
 
-yomichan/js/user.js: yomichan sentence-export.min.js
-	ln -sf ../../sentence-export.min.js $@
+yomichan/images/%.svg: %.svg
+	cp $< $@
+
+yomichan/css/%.css: %.css
+	cp $< $@
+
+yomichan/js/%.js: %.js
+	cp $< $@
+
+yomichan/%.patched: %.diff
+	patch -so - $(@:.patched=) < $< > $@
+
+yomichan/%.bak: yomichan/%
+	cp $< $@
 
 yomichan-chrome.zip:
 	curl https://github.com/FooSoft/yomichan/releases/latest/download/$@ -Lso- > $@
@@ -19,29 +31,30 @@ yomichan/manifest.json.bak:
 yomichan/search.html.bak:
 	cp yomichan/search.html $@
 
-yomichan/manifest-patched.json: yomichan/manifest.json.bak
-	jq '.content_scripts[0].js[.content_scripts[0].js | length] |= .+ "js/user.js"' $< > $@
+yomichan/search.html.patched: search.html.diff
+yomichan/settings.html.patched: settings.html.diff
+yomichan/manifest.json.patched: yomichan/manifest.json.bak
+	jq '.content_scripts[0].js[.content_scripts[0].js | length] |= .+ "js/userscript-loader.js"' $< > $@
+	jq '.content_security_policy |= .+ "'"; script-src 'self' 'unsafe-eval'"'"' $< > $@
 
-yomichan/search-patched.html: yomichan/search.html.bak
-	sed 's#</body>#<script defer src="/js/user.js"></script>\n</body>#' $< > $@
-
-yomichan/images/%.svg: %.svg
-	ln -sf ../../copy.svg $@
-
-yomichan/css/%.css: %.css
-	ln -sf ../../$< $@
-
-patch: yomichan
-patch: yomichan/search-patched.html
-patch: yomichan/manifest-patched.json
-patch: yomichan/js/user.js
-patch: yomichan/images/copy.svg
-patch: yomichan/css/sentence-export.css
+download: yomichan
+backup: download
+backup: yomichan/manifest.json.bak
+backup: yomichan/search.html.bak
+backup: yomichan/settings.html.bak
+patch: backup
+patch: yomichan/js/userscript-loader.js
+patch: yomichan/images/script.svg
+patch: yomichan/css/userscript-settings.css
+patch: yomichan/search.html.patched
+patch: yomichan/settings.html.patched
+patch: yomichan/manifest.json.patched
 patch:
-	ln -sf search-patched.html yomichan/search.html
-	ln -sf manifest-patched.json yomichan/manifest.json
+	mv yomichan/search.html.patched yomichan/search.html
+	mv yomichan/settings.html.patched yomichan/settings.html
+	mv yomichan/manifest.json.patched yomichan/manifest.json
 
-yomichan-chrome-patched.zip: yomichan patch
+yomichan-chrome-patched.zip: patch
 	zip -qr $@ $<
 
 clean:
