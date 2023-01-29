@@ -56,7 +56,7 @@ patch:
 	mv yomichan/manifest.json.patched yomichan/manifest.json
 
 yomichan-chrome-patched.zip: patch
-	zip -qr $@ $<
+	zip -qr $@ yomichan
 
 clean:
 	$(RM) -r sentence-export.min.js yomichan yomichan-chrome.zip yomichan-chrome-patched.zip
