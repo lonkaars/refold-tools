@@ -1,5 +1,5 @@
 --- yomichan-original/settings.html	2022-10-30 12:39:42.000000000 +0100
-+++ yomichan/settings.html	2023-01-29 15:42:10.643564451 +0100
++++ yomichan/settings.html	2023-01-29 18:28:49.783600435 +0100
 @@ -14,6 +14,8 @@
      <link rel="stylesheet" type="text/css" href="/css/material.css">
      <link rel="stylesheet" type="text/css" href="/css/settings.css">
@@ -54,7 +54,7 @@
 +        </div>
 +        <div class="modal-body" id="user-script-container">
 +            <div class="user-script-header">user.js (runs on search page and in popup frame)</div>
-+            <textarea class="no-wrap" autocomplete="off" spellcheck="false" id="user-script-editor" data-setting="general.userScript" data-tab-action="indent,4"></textarea>
++            <textarea autocomplete="off" spellcheck="false" id="user-script-editor" data-setting="general.userScript" data-tab-action="indent,4"></textarea>
 +        </div>
 +        <div class="modal-footer">
 +            <button data-modal-action="hide">Close</button>

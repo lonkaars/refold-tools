@@ -7,7 +7,8 @@ ARTIFACTS := yomichan/yomichan-chrome-patched.zip \
 all: $(ARTIFACTS)
 
 yomichan/yomichan-chrome-patched.zip:
-	make -BC yomichan yomichan-chrome-patched.zip
+	make -C yomichan clean
+	make -C yomichan yomichan-chrome-patched.zip
 
 anki-card-template/back-template.html anki-card-template/front-template.html:
 	make -BC anki-card-template
