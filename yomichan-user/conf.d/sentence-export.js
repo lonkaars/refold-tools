@@ -63,23 +63,13 @@ function patchSearchBar() {
 	searchBarOuter.insertBefore(button, searchBarOuter.childNodes[2]);
 }
 
-function patchCSS() {
-	var csslink = document.createElement("link");
-	csslink.setAttribute("rel", "stylesheet");
-	csslink.setAttribute("type", "text/css");
-	csslink.setAttribute("href", "/css/sentence-export.css");
-	document.head.appendChild(csslink);
-}
-
 function run() {
 	if (document.body.classList.contains("patched")) return;
 
 	patchSearchBar();
-	patchCSS();
 
 	document.body.classList.add("patched");
 }
 
 run();
-window.onload = () => run();
 

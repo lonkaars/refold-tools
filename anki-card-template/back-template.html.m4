@@ -1,2 +1,2 @@
 define(`CARD_SIDE', `back')dnl
-include(`template.m4')dnl
+include(`template.html.m4')dnl

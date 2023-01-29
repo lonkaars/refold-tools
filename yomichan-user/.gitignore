@@ -1,0 +1,7 @@
+*.b64
+header.txt
+user.css
+user.js
+yomichan-user.css
+yomichan-user.js
+conf.d/sentence-export.css

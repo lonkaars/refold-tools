@@ -34,8 +34,9 @@ yomichan/search.html.bak:
 yomichan/search.html.patched: search.html.diff
 yomichan/settings.html.patched: settings.html.diff
 yomichan/manifest.json.patched: yomichan/manifest.json.bak
-	jq '.content_scripts[0].js[.content_scripts[0].js | length] |= .+ "js/userscript-loader.js"' $< > $@
-	jq '.content_security_policy |= .+ "'"; script-src 'self' 'unsafe-eval'"'"' $< > $@
+	jq '.content_scripts[0].js[.content_scripts[0].js | length] |= .+ "js/userscript-loader.js"' $< |\
+	jq '.content_security_policy |= .+ "'"; script-src 'self' 'unsafe-eval'"'"' |\
+	jq '.content_security_policy |= sub("img-src";"img-src data:")' > $@
 
 download: yomichan
 backup: download

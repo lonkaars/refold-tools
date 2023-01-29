@@ -1,7 +1,4 @@
-define(`EXEC',`translit(esyscmd($1),`
-')')dnl
-define(`TIMESTAMP',EXEC(`date'))dnl
-define(`VERSION',EXEC(`git describe --tags'))dnl
+include(`common.m4')dnl
 <!-- lonkaars anki card template version VERSION()
      generated at TIMESTAMP()
      https://git.pipeframe.xyz/lonkaars/refold-tools -->

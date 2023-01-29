@@ -11,5 +11,9 @@ TRIM_WHITESPACE:=sed -E 's/^\s*(.*)\s+$$/\1/g'
 %.min.css: %.css
 	cat $< | $(TO_SINGLE_LINE) | $(REMOVE_SLASH_STAR_COMMENTS) | $(REMOVE_TABS) | $(REMOVE_WHITESPACE) | $(TRIM_WHITESPACE) > $@
 
-%.html: %.m4
-	m4 $< > $@
+%: %.m4
+	m4 -I.. $< > $@
+
+%.b64: %
+	base64 -w0 $< > $@
+
