@@ -1,6 +1,6 @@
-all:
+all: patch
 
-.PHONY: clean patch download backup
+.PHONY: clean patch download backup yomichan
 
 include ../common.mk
 
@@ -23,7 +23,7 @@ yomichan-chrome.zip:
 	curl https://github.com/FooSoft/yomichan/releases/latest/download/$@ -Lso- > $@
 
 yomichan: yomichan-chrome.zip
-	unzip -qo yomichan-chrome.zip -d yomichan
+	unzip -qo $< -d $@
 
 yomichan/manifest.json.bak:
 	cp yomichan/manifest.json $@
