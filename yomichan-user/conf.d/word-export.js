@@ -1,5 +1,4 @@
-function exportWord() {
-	var entry = this.parentNode.parentNode.parentNode;
+function exportWord(entry) {
 	var wordElement = entry.getElementsByClassName("headword-term")[0];
 	var hasKanji = false;
 
@@ -44,18 +43,23 @@ function exportWord() {
 function addWordCopyButtons() {
 	var definitions = document.getElementById("dictionary-entries").getElementsByClassName("entry");
 	for (var definition of definitions) {
+		if (definition.classList.contains("patched")) continue;
 		var actions = definition.getElementsByClassName("actions")[0];
 
 		var button = document.createElement("button");
 		button.classList.add("action-button");
-		button.onclick = exportWord;
+		button.onclick = function() { exportWord(this.parentElement.parentElement.parentElement); };
 		var icon = document.createElement("span");
+		var title = "Copy definition (Alt + C)";
 		icon.classList.add("icon");
 		icon.classList.add("color-icon");
 		icon.classList.add("action-icon");
 		icon.setAttribute("data-icon", "copy-bmp");
+		icon.setAttribute("title", title);
+		icon.setAttribute("data-title-default", title);
 		button.appendChild(icon);
 		actions.insertBefore(button, actions.childNodes[0]);
+		definition.classList.add("patched");
 	}
 }
 
@@ -64,5 +68,10 @@ function addWordCopyButtons() {
 		// gets fired on search results render complete
 		if (ev.data.action == "renderMulti.response")
 			addWordCopyButtons();
+	});
+	window.addEventListener("keydown", ev => {
+		if (ev.key != "c") return;
+		if (ev.altKey != true) return;
+		exportWord(document.getElementsByClassName("entry-current")[0]);
 	});
 })();

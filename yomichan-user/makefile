@@ -8,6 +8,7 @@ user.css: conf.d/sentence-export.css
 user.css: conf.d/custom.css
 user.js: conf.d/word-export.js
 user.css: conf.d/word-export.css
+user.js: conf.d/shortcuts.js
 
 include ../common.mk
 
@@ -26,6 +27,7 @@ user.css:
 	cat $^ > $@
 
 header.txt: header.txt.m4
+header.txt: ../.git/HEAD
 
 yomichan-user.js: header.txt user.min.js
 	cat $^ > $@

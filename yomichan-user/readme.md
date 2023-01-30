@@ -14,3 +14,24 @@ into [my custom anki card template](../anki-card-template/readme.md).
 ![new copy button in yomichan search bar](../assets/copy-button-yomichan.png)
 ![copied sentence in anki](../assets/copy-button-anki.png)
 
+## word export
+
+adds a copy button to each definition for copying into [my custom anki card
+template](../anki-card-template/readme.md). (Should) automatically insert
+interpuncts, add pitch accent downfall step (if available), and marker if word
+is usually written as kana only. <kbd>Alt</kbd>+<kbd>C</kbd> to copy currently
+selected entry.
+
+![word copy button in yomichan](../assets/word-copy-yomichan.png)  
+![copied word in anki](../assets/word-copy-anki.png)  
+![copied word in anki (card display)](../assets/word-copy-anki-rendered.png)
+
+## shortcuts
+
+adds the following shortcuts to yomichan:
+
+|shortcut|action|
+|-|-|
+|<kbd>Alt</kbd>+<kbd>J</kbd>|select next definition (move down)|
+|<kbd>Alt</kbd>+<kbd>K</kbd>|select previous definition (move up)|
+|<kbd>Alt</kbd>+<kbd>G</kbd>|scroll back to top|
