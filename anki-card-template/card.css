@@ -23,6 +23,7 @@
 	--global-transition-scale: 1.0; /* transition duration multiplier */
 	--indicator-opacity: 50%; /* opacity of indicators in translations (word type) */
 	--pitch-accent-opacity: 70%; /* opacity of pitch accent indicator in reading field */
+	--reading-expand-transition: calc(300ms * var(--global-transition-scale)); /* hover expand transition duration for multiple readings */
 }
 .mobile #card {
 	--text-block-padding: 0.5em;
@@ -299,8 +300,9 @@ body {
 /* make sure to hide empty fields */
 .parse.empty { display: none !important; }
 
-/* don't break syllables in the reading field on vertical mobile */
-.mobile #card.vertical-layout #back #target-word-reading .reading .syllable { white-space: nowrap; }
+/* don't break syllables in the reading field */
+#card #back #target-word-reading .kanji .writing,
+#card #back #target-word-reading .reading .syllable { white-space: nowrap; }
 
 /* subtile style */
 .subtile {
@@ -431,3 +433,94 @@ body {
 #target-word-translation .indicator .stamp::before,
 #target-word-translation .indicator > *:not(.stamp),
 #target-word-translation .indicator::after { opacity: var(--indicator-opacity); }
+
+/* collapse kanji with multiple writings */
+#back .kanji {
+	display: inline-flex;
+	--writing-padding: 4px;
+	--writing-margin: 4px;
+}
+#back .kanji .writing-separator {
+	display: none;
+}
+#back .kanji .extra-writings .extra-count {
+	transition-property: opacity;
+	transition-duration: var(--reading-expand-transition);
+	opacity: 1;
+	color: white;
+	font-size: 75%;
+	font-weight: bold;
+}
+#back .kanji .extra-writings {
+	transition-property: padding;
+	transition-duration: var(--reading-expand-transition);
+	position: relative;
+	padding: 0 20px;
+}
+#back .kanji .extra-writings::after {
+	content: "";
+	position: absolute;
+	border-radius: 8px;
+	background-color: currentColor;
+	transition-property: inset, opacity;
+	transition-duration: var(--reading-expand-transition);
+	opacity: 80%;
+	inset: 4px 4px;
+	z-index: -1;
+}
+#back .kanji .extra-writings .writing {
+	margin: 0;
+	position: relative;
+	overflow: hidden;
+	transition-property: padding, margin, grid-template-rows, grid-template-columns;
+	transition-duration: var(--reading-expand-transition);
+	display: grid;
+	grid-template-rows: 1fr;
+	grid-template-columns: 0fr;
+}
+#back .kanji .extra-writings .writing .inner {
+	min-height: 0;
+	min-width: 0;
+	position: relative;
+	transition: opacity var(--reading-expand-transition);
+	opacity: 0;
+	left: 50%;
+	transform: translate(-50%, 0%);
+}
+#back .kanji .extra-writings .writing::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background-color: currentColor;
+	transition: opacity var(--reading-expand-transition);
+	opacity: 0;
+	border-radius: 8px;
+}
+
+.extra-writings {
+	position: relative;
+	display: inline-flex;
+}
+.extra-count {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#back .kanji .extra-writings {
+	border-radius: 8px;
+	padding: 0 20px;
+}
+
+#back #target-word-reading:hover .kanji .extra-writings .writing {
+	grid-template-columns: 1fr;
+	margin: 0 var(--writing-margin);
+	padding: 0 var(--writing-padding);
+}
+#back #target-word-reading:hover .kanji .extra-writings .writing .inner { opacity: 1; }
+#back #target-word-reading:hover .kanji .extra-writings .extra-count { opacity: 0; }
+#back #target-word-reading:hover .kanji .extra-writings { padding: 0; }
+#back #target-word-reading:hover .kanji .extra-writings::after { inset: 0px 4px; }
+#back #target-word-reading:hover .kanji .extra-writings::after { opacity: 0; }
+#back #target-word-reading:hover .kanji .extra-writings .writing::after { opacity: 20%; }

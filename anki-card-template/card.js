@@ -165,6 +165,9 @@ function parseReading(nodes) {
 		var note_head = 0;
 		var note_tail = 0;
 		var out = ""; // output html
+		var writings = [""];
+		var writingIndex = 0;
+		var mode = "writing"; // parsing mode ("writing" or "reading")
 
 		for (var i = 0; i < input.length; i++) {
 			if (i == 0) {
@@ -182,13 +185,29 @@ function parseReading(nodes) {
 			// ignore note if parsed
 			else if (i == note_head) { i = note_tail - 1; continue; }
 			// reading open bracket
-			if (input[i] == '\u3010') { out += `</span><span class="reading"><span class="bracket">${input[i]}</span><span class="syllable">`; continue; }
+			if (mode == "writing" && input[i] == '\u3010') {
+				mode = "reading";
+				for(let i = 0; i < writings.length; i++) {
+					if (i == 1) out += `<span class="extra-writings">`;
+					if (i > 0) out += `<span class="writing-separator">\u3001</span>`;
+					var classes = ["writing"];
+					if (i == 0) classes.push("first")
+					out += `<span class="${classes.join(' ')}"><span class="inner">${writings[i].trim()}</span></span>`;
+					if (writings.length > 1 && i == writings.length - 1) out += `<span class="extra-count">+${writings.length - 1}</span></span>`;
+				}
+				writings = []; writingIndex = 0;
+				out += `</span><span class="reading"><span class="bracket">${input[i]}</span><span class="syllable">`;
+				continue;
+			}
 			// reading closing bracket
-			if (input[i] == '\u3011') { out += `</span><span class="bracket">${input[i]}</span></span>`; continue; }
+			if (mode == "reading" && input[i] == '\u3011') { out += `</span><span class="bracket">${input[i]}</span></span>`; continue; }
 			// interpunct (syllable separator)
-			if (input[i] == '\u30fb') { out += `</span><span class="syllable-separator">${input[i]}</span><span class="syllable">`; continue; }
+			if (mode == "reading" && input[i] == '\u30fb') { out += `</span><span class="syllable-separator">${input[i]}</span><span class="syllable">`; continue; }
+			// comma (writing separator)
+			if (mode == "writing" && (input[i] == ',' || input[i] == "\u3001")) { writings[++writingIndex] = ""; continue; }
 
-			out += input[i];
+			if (mode == "writing") writings[writingIndex] += input[i];
+			else out += input[i];
 		}
 		return out;
 	});
