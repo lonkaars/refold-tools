@@ -313,16 +313,15 @@ body {
 
 /* word note style */
 #card #target-word-reading .kanji { position: relative; }
-#card #target-word-reading .note { position: absolute; }
 #card #target-word-reading .note {
-	left: -0.25em;
-	top: 50%;
-	transform: translate(-100%, -50%);
+	line-height: 0;
+	margin: 0;
+	margin-top: 1em;
+	margin-right: 0.25em;
 }
 .mobile #card.vertical-layout #target-word-reading .note {
-	top: -0.25em;
-	left: 50%;
-	transform: translate(-50%, -100%);
+	margin: 0;
+	margin-bottom: 0.5em;
 }
 
 /* definitions */
@@ -440,9 +439,6 @@ body {
 	--writing-padding: 4px;
 	--writing-margin: 4px;
 }
-#back .kanji .writing-separator {
-	display: none;
-}
 #back .kanji .extra-writings .extra-count {
 	transition-property: opacity;
 	transition-duration: var(--reading-expand-transition);
@@ -473,6 +469,7 @@ body {
 	transform: translate(-50%, -50%);
 	z-index: -1;
 }
+#back .kanji .extra-writings .writing-separator,
 #back .kanji .extra-writings .writing {
 	margin: 0;
 	position: relative;
@@ -482,12 +479,11 @@ body {
 	width: max-content;
 	display: grid;
 	align-items: center;
-	align-content: center;
 	justify-content: center;
-	/* justify-items: center;*/
 	grid-template-rows: 1fr;
 	grid-template-columns: 0fr;
 }
+#back .kanji .extra-writings .writing-separator .inner,
 #back .kanji .extra-writings .writing .inner {
 	min-height: 0;
 	min-width: 0;
@@ -522,14 +518,12 @@ body {
 	padding: 0 20px;
 }
 
-#back #target-word-reading:hover .kanji .extra-writings .writing {
-	grid-template-columns: 1fr;
-	padding: 0 var(--writing-padding);
-}
+#back #target-word-reading:hover .kanji .extra-writings .writing,
+#back #target-word-reading:hover .kanji .extra-writings .writing-separator { grid-template-columns: 1fr; }
 #back #target-word-reading:hover .kanji .extra-writings .extra-count { opacity: 0; }
-#back #target-word-reading:hover .kanji .extra-writings .writing .inner { opacity: 1; }
+#back #target-word-reading:hover .kanji .extra-writings .writing .inner,
+#back #target-word-reading:hover .kanji .extra-writings .writing-separator .inner { opacity: 1; }
 #back #target-word-reading:hover .kanji .extra-writings { padding: 0; }
-#back #target-word-reading:hover .kanji .extra-writings .writing::after { opacity: 20%; }
 #back #target-word-reading:hover .kanji .extra-writings { gap: var(--writing-margin); }
 #back #target-word-reading:hover .kanji .extra-writings::after {
 	width: 100%;
@@ -537,6 +531,7 @@ body {
 	opacity: 0;
 }
 
+.mobile #card.vertical-layout #back #target-word-reading:hover .kanji .extra-writings .writing::after { opacity: 20%; }
 .mobile #card.vertical-layout #back .kanji,
 .mobile #card.vertical-layout #back .kanji .extra-writings {
 	flex-direction: column;
@@ -545,3 +540,6 @@ body {
 .mobile #card.vertical-layout #back #target-word-reading:hover .kanji .extra-writings { padding: 0; }
 .mobile #card.vertical-layout #back .kanji .extra-writings .writing { grid-template-rows: 0fr; }
 .mobile #card.vertical-layout #back #target-word-reading:hover .kanji .extra-writings .writing { grid-template-rows: 1fr; }
+
+.mobile #card.vertical-layout #back .kanji .writing-separator { display: none; }
+.mobile #card.vertical-layout #back #target-word-reading:hover .kanji .extra-writings .writing { padding: 0 var(--writing-padding); }

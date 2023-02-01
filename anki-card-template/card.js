@@ -189,7 +189,7 @@ function parseReading(nodes) {
 				mode = "reading";
 				for(let i = 0; i < writings.length; i++) {
 					if (i == 1) out += `<span class="extra-writings">`;
-					if (i > 0) out += `<span class="writing-separator">\u3001</span>`;
+					if (i > 0) out += `<span class="writing-separator"><span class="inner">\u3001</span></span>`;
 					var classes = ["writing"];
 					if (i == 0) classes.push("first")
 					out += `<span class="${classes.join(' ')}"><span class="inner">${writings[i].trim()}</span></span>`;
