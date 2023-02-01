@@ -131,10 +131,10 @@ body {
 
 /* hide answer and separator on card front */
 #card.front #back,
-#card.front hr,
-#card.front ruby rt.hidden {
-	display: none !important;
-}
+#card.front hr { display: none !important; }
+
+/* hide furigana but don't shift layout */
+#card.front ruby rt.hidden { visibility: hidden; }
 
 /* extra space above complete translated sentence */
 #card #back #sentence-translation { margin-top: 2em; }
@@ -265,6 +265,7 @@ body {
 	grid-template-columns: 0fr;
 	justify-content: center;
 	align-items: center;
+	align-content: center;
 }
 #card #back #tags .tag .inner {
 	position: relative;
@@ -401,10 +402,8 @@ body {
 #target-word-reading .indicator::after { border: none; }
 #target-word-reading .indicator {
 	position: relative;
-	bottom: 1px; /* cancel out margin of .indicator > .content */
 	font-size: 80%;
 	font-weight: bold;
-	vertical-align: baseline;
 }
 #target-word-reading .indicator .content { margin: 1px 6px; }
 #target-word-reading .indicator::before {
@@ -480,6 +479,7 @@ body {
 	display: grid;
 	align-items: center;
 	justify-content: center;
+	align-content: center;
 	grid-template-rows: 1fr;
 	grid-template-columns: 0fr;
 }
@@ -539,3 +539,8 @@ body {
 .mobile #card.vertical-layout #back .kanji .writing-separator { display: none; }
 .mobile #card.vertical-layout #back #target-word-reading:hover .kanji .extra-writings .writing { padding: 0 var(--writing-padding); }
 .mobile #card.vertical-layout #back #target-word-reading:hover .kanji .extra-writings { gap: var(--writing-margin); }
+
+/* vertical align for target-word-reading parts */
+#card.horizontal-layout #target-word-reading > * {
+	vertical-align: middle;
+}
