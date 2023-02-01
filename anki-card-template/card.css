@@ -269,16 +269,14 @@ body {
 #card #back #tags .tag .inner {
 	position: relative;
 	opacity: 0;
-	left: 50%;
-	transform: translate(-50%, 0%);
 	transition-duration: var(--tag-transition);
 	transition-property: opacity, padding;
 	white-space: nowrap;
 	min-height: 0;
 	min-width: 0;
-	user-select: none;
+	display: flex;
+	justify-content: center;
 	cursor: default;
-	margin: 0 auto;
 }
 
 /* tag hover/hold expand */
@@ -436,7 +434,9 @@ body {
 
 /* collapse kanji with multiple writings */
 #back .kanji {
+	position: relative;
 	display: inline-flex;
+	flex-direction: row;
 	--writing-padding: 4px;
 	--writing-margin: 4px;
 }
@@ -447,25 +447,30 @@ body {
 	transition-property: opacity;
 	transition-duration: var(--reading-expand-transition);
 	opacity: 1;
-	color: white;
 	font-size: 75%;
 	font-weight: bold;
 }
 #back .kanji .extra-writings {
-	transition-property: padding;
+	transition-property: padding, gap;
+	gap: 0px;
 	transition-duration: var(--reading-expand-transition);
 	position: relative;
-	padding: 0 20px;
+	padding: 0 1em;
+	align-items: center;
 }
 #back .kanji .extra-writings::after {
 	content: "";
 	position: absolute;
-	border-radius: 8px;
+	border-radius: 0.5em;
 	background-color: currentColor;
-	transition-property: inset, opacity;
+	transition-property: width, height, opacity;
 	transition-duration: var(--reading-expand-transition);
-	opacity: 80%;
-	inset: 4px 4px;
+	opacity: 15%;
+	top: 50%;
+	left: 50%;
+	height: 1em;
+	width: 1.5em;
+	transform: translate(-50%, -50%);
 	z-index: -1;
 }
 #back .kanji .extra-writings .writing {
@@ -474,18 +479,22 @@ body {
 	overflow: hidden;
 	transition-property: padding, margin, grid-template-rows, grid-template-columns;
 	transition-duration: var(--reading-expand-transition);
+	width: max-content;
 	display: grid;
+	align-items: center;
+	align-content: center;
+	justify-content: center;
+	/* justify-items: center;*/
 	grid-template-rows: 1fr;
 	grid-template-columns: 0fr;
 }
 #back .kanji .extra-writings .writing .inner {
 	min-height: 0;
 	min-width: 0;
-	position: relative;
 	transition: opacity var(--reading-expand-transition);
 	opacity: 0;
-	left: 50%;
-	transform: translate(-50%, 0%);
+	display: flex;
+	justify-content: center;
 }
 #back .kanji .extra-writings .writing::after {
 	content: "";
@@ -515,12 +524,24 @@ body {
 
 #back #target-word-reading:hover .kanji .extra-writings .writing {
 	grid-template-columns: 1fr;
-	margin: 0 var(--writing-margin);
 	padding: 0 var(--writing-padding);
 }
-#back #target-word-reading:hover .kanji .extra-writings .writing .inner { opacity: 1; }
 #back #target-word-reading:hover .kanji .extra-writings .extra-count { opacity: 0; }
+#back #target-word-reading:hover .kanji .extra-writings .writing .inner { opacity: 1; }
 #back #target-word-reading:hover .kanji .extra-writings { padding: 0; }
-#back #target-word-reading:hover .kanji .extra-writings::after { inset: 0px 4px; }
-#back #target-word-reading:hover .kanji .extra-writings::after { opacity: 0; }
 #back #target-word-reading:hover .kanji .extra-writings .writing::after { opacity: 20%; }
+#back #target-word-reading:hover .kanji .extra-writings { gap: var(--writing-margin); }
+#back #target-word-reading:hover .kanji .extra-writings::after {
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+}
+
+.mobile #card.vertical-layout #back .kanji,
+.mobile #card.vertical-layout #back .kanji .extra-writings {
+	flex-direction: column;
+	padding: 0.5em 0;
+}
+.mobile #card.vertical-layout #back #target-word-reading:hover .kanji .extra-writings { padding: 0; }
+.mobile #card.vertical-layout #back .kanji .extra-writings .writing { grid-template-rows: 0fr; }
+.mobile #card.vertical-layout #back #target-word-reading:hover .kanji .extra-writings .writing { grid-template-rows: 1fr; }
