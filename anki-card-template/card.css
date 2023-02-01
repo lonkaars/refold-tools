@@ -14,7 +14,7 @@
 	--reading-kana-font-size: var(--native-font-size); /* font size of kana in reading field */
 	--native-font-size: 1.0rem; /* font size for generic native (latin) text */
 	--foreign-font-size: 1.5rem; /* font size for generic foreign (japanese) text */
-	--definition-spacing: 0.75em; /* definition spacing (mobile vertical only) */
+	--definition-spacing: 0.25em; /* definition spacing (mobile vertical only) */
 	--definition-marker-width: 2em; /* definition marker width (mobile vertical only) */
 	--definition-marker-height: 2px; /* definition marker height (mobile vertical only) */
 	--definition-marker-opacity: 50%; /* definition marker opacity (mobile vertical only) */
@@ -336,28 +336,22 @@ body {
 	display: inline;
 }
 
-/* mobile definitions style */
 #card #target-word-translation .definitions .definition-separator::after { content: ", "; }
-.mobile #card.vertical-layout #target-word-translation .definitions .definition-separator { display: none; }
-.mobile #card.vertical-layout #target-word-translation .definitions .definition {
-	position: relative;
-	display: block;
-	max-width: max-content;
-	margin: var(--definition-spacing) auto;
+
+/* mobile definitions style */
+.mobile #card.vertical-layout #target-word-translation .definitions {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
-.mobile #card.vertical-layout #target-word-translation .definitions .definition:last-child::before { display: none; }
-.mobile #card.vertical-layout #target-word-translation .definitions .definition::before {
-	content: "";
-	position: absolute;
-	bottom: calc(-0.5 * var(--definition-spacing));
-	left: 50%;
-	right: 0px;
+.mobile #card.vertical-layout #target-word-translation .definitions .definition-separator::after { content: ""; }
+.mobile #card.vertical-layout #target-word-translation .definitions .definition-separator {
 	height: var(--definition-marker-height);
 	width: var(--definition-marker-width);
 	opacity: var(--definition-marker-opacity);
 	border-radius: 999px;
 	background-color: currentColor;
-	transform: translate(-50%, 50%);
+	margin: var(--definition-spacing) 0;
 }
 
 /* indicator (word type + defaults) */
@@ -452,6 +446,7 @@ body {
 	position: relative;
 	padding: 0 1em;
 	align-items: center;
+	cursor: text;
 }
 #back .kanji .extra-writings::after {
 	content: "";
