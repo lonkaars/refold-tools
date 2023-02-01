@@ -501,45 +501,41 @@ body {
 	opacity: 0;
 	border-radius: 8px;
 }
-
-.extra-writings {
-	position: relative;
-	display: inline-flex;
-}
 .extra-count {
 	position: absolute;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
 }
-
 #back .kanji .extra-writings {
+	position: relative;
+	display: inline-flex;
 	border-radius: 8px;
 	padding: 0 20px;
 }
 
+/* multiple writings hover/hold expand */
 #back #target-word-reading:hover .kanji .extra-writings .writing,
 #back #target-word-reading:hover .kanji .extra-writings .writing-separator { grid-template-columns: 1fr; }
 #back #target-word-reading:hover .kanji .extra-writings .extra-count { opacity: 0; }
 #back #target-word-reading:hover .kanji .extra-writings .writing .inner,
 #back #target-word-reading:hover .kanji .extra-writings .writing-separator .inner { opacity: 1; }
 #back #target-word-reading:hover .kanji .extra-writings { padding: 0; }
-#back #target-word-reading:hover .kanji .extra-writings { gap: var(--writing-margin); }
 #back #target-word-reading:hover .kanji .extra-writings::after {
 	width: 100%;
 	height: 100%;
 	opacity: 0;
 }
 
+/* multiple writings as tags (vertical mobile layout only) */
 .mobile #card.vertical-layout #back #target-word-reading:hover .kanji .extra-writings .writing::after { opacity: 20%; }
 .mobile #card.vertical-layout #back .kanji,
-.mobile #card.vertical-layout #back .kanji .extra-writings {
-	flex-direction: column;
-	padding: 0.5em 0;
-}
+.mobile #card.vertical-layout #back .kanji .extra-writings { flex-direction: column; }
+.mobile #card.vertical-layout #back .kanji { padding-top: 0.5em; }
+.mobile #card.vertical-layout #back .kanji .extra-writings { padding: 0.5em 0; }
 .mobile #card.vertical-layout #back #target-word-reading:hover .kanji .extra-writings { padding: 0; }
 .mobile #card.vertical-layout #back .kanji .extra-writings .writing { grid-template-rows: 0fr; }
 .mobile #card.vertical-layout #back #target-word-reading:hover .kanji .extra-writings .writing { grid-template-rows: 1fr; }
-
 .mobile #card.vertical-layout #back .kanji .writing-separator { display: none; }
 .mobile #card.vertical-layout #back #target-word-reading:hover .kanji .extra-writings .writing { padding: 0 var(--writing-padding); }
+.mobile #card.vertical-layout #back #target-word-reading:hover .kanji .extra-writings { gap: var(--writing-margin); }

@@ -291,28 +291,33 @@ function setSpoiler(nodes) {
 	return HTMLtoParseArr(`<span class="outer"><span class="inner">` + nodes.map(n => n.data).join("") + "</span></span>");
 }
 
-HTMLElement.prototype.parse = function() {
-	if (this.classList.contains("parsed")) return; // ignore already parsed elements
-	var input = this.innerHTML; // get raw data from anki field
+function parse(input, classes) {
 	var nodes = HTMLtoParseArr(input); // seperate user text from html formatting (keep html intact)
 
 	// parsers
-	if (this.classList.contains("parse-format")) nodes = parseFormat(nodes);
-	if (this.classList.contains("parse-furigana")) nodes = parseFurigana(nodes);
-	if (this.classList.contains("parse-reading")) nodes = parseReading(nodes);
-	if (this.classList.contains("parse-indicators")) nodes = parseIndicators(nodes);
-	if (this.classList.contains("parse-tags")) nodes = parseTags(nodes);
-	if (this.classList.contains("parse-definitions")) nodes = parseDefinitions(nodes);
-	if (this.classList.contains("parse-script")) nodes = parseScript(nodes);
-	if (this.classList.contains("spoiler")) nodes = setSpoiler(nodes);
+	if (classes.includes("parse-format")) nodes = parseFormat(nodes);
+	if (classes.includes("parse-furigana")) nodes = parseFurigana(nodes);
+	if (classes.includes("parse-reading")) nodes = parseReading(nodes);
+	if (classes.includes("parse-indicators")) nodes = parseIndicators(nodes);
+	if (classes.includes("parse-tags")) nodes = parseTags(nodes);
+	if (classes.includes("parse-definitions")) nodes = parseDefinitions(nodes);
+	if (classes.includes("parse-script")) nodes = parseScript(nodes);
+	if (classes.includes("spoiler")) nodes = setSpoiler(nodes);
 
-	// join parsed text with unmodified html
+	return nodes;
+};
+
+HTMLElement.prototype.parse = function() {
+	if (this.classList.contains("parsed")) return; // ignore already parsed elements
+
+	var nodes = parse(this.innerHTML, Array.from(this.classList));
+
 	var out = nodes.map(n => n.data).join("");
 	this.innerHTML = out;
 	this.classList.add("parsed");
 	if (nodes.reduce((current, n) => current + (n.type == "text" ? n.data.length : 0), 0) == 0)
 		this.classList.add("empty"); // if innerHTML only contains empty html (no 'user' text)
-};
+}
 
 function layout() {
 	// set vertical layout on vertical displays (primarily mobile screens)
