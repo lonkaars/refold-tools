@@ -169,6 +169,18 @@ function parseReading(nodes) {
 		var writingIndex = 0;
 		var mode = "writing"; // parsing mode ("writing" or "reading")
 
+		var flush_writings = () => {
+			for(let i = 0; i < writings.length; i++) {
+				if (i == 1) out += `<span class="extra-writings">`;
+				if (i > 0) out += `<span class="writing-separator"><span class="inner">\u3001</span></span>`;
+				var classes = ["writing"];
+				if (i == 0) classes.push("first");
+				out += `<span class="${classes.join(' ')}"><span class="inner">${writings[i].trim()}</span></span>`;
+				if (writings.length > 1 && i == writings.length - 1) out += `<span class="extra-count">+${writings.length - 1}</span></span>`;
+			}
+			writings = []; writingIndex = 0;
+		};
+
 		for (var i = 0; i < input.length; i++) {
 			if (i == 0) {
 				// start kanji reading
@@ -187,15 +199,7 @@ function parseReading(nodes) {
 			// reading open bracket
 			if (mode == "writing" && input[i] == '\u3010') {
 				mode = "reading";
-				for(let i = 0; i < writings.length; i++) {
-					if (i == 1) out += `<span class="extra-writings">`;
-					if (i > 0) out += `<span class="writing-separator"><span class="inner">\u3001</span></span>`;
-					var classes = ["writing"];
-					if (i == 0) classes.push("first");
-					out += `<span class="${classes.join(' ')}"><span class="inner">${writings[i].trim()}</span></span>`;
-					if (writings.length > 1 && i == writings.length - 1) out += `<span class="extra-count">+${writings.length - 1}</span></span>`;
-				}
-				writings = []; writingIndex = 0;
+				flush_writings();
 				out += `</span><span class="reading"><span class="bracket">${input[i]}</span><span class="syllable">`;
 				continue;
 			}
@@ -209,6 +213,7 @@ function parseReading(nodes) {
 			if (mode == "writing") writings[writingIndex] += input[i];
 			else out += input[i];
 		}
+		flush_writings(); // kana only word fix
 		return out;
 	});
 }
