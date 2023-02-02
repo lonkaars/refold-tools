@@ -170,22 +170,22 @@ function parseReading(nodes) {
 		var mode = "writing"; // parsing mode ("writing" or "reading")
 
 		var flush_writings = () => {
+			if (writings.reduce((current, n) => current + n.length, 0) == 0) return;
+			out += `<span class="kanji">`;
 			for(let i = 0; i < writings.length; i++) {
 				if (i == 1) out += `<span class="extra-writings">`;
 				if (i > 0) out += `<span class="writing-separator"><span class="inner">\u3001</span></span>`;
 				var classes = ["writing"];
 				if (i == 0) classes.push("first");
 				out += `<span class="${classes.join(' ')}"><span class="inner">${writings[i].trim()}</span></span>`;
-				if (writings.length > 1 && i == writings.length - 1) out += `<span class="extra-count">+${writings.length - 1}</span></span>`;
 			}
+			if (writings.length > 1) out += `<span class="extra-count">+${writings.length - 1}</span></span>`;
+			out += `</span>`;
 			writings = []; writingIndex = 0;
 		};
 
 		for (var i = 0; i < input.length; i++) {
 			if (i == 0) {
-				// start kanji reading
-				out += `<span class="kanji">`;
-
 				var match = input.match(/\((.+?)\)/);
 				// display "(note)" before kanji
 				if (match) {
@@ -214,6 +214,7 @@ function parseReading(nodes) {
 			else out += input[i];
 		}
 		flush_writings(); // kana only word fix
+		console.log(out);
 		return out;
 	});
 }
@@ -316,12 +317,15 @@ HTMLElement.prototype.parse = function() {
 	if (this.classList.contains("parsed")) return; // ignore already parsed elements
 
 	var nodes = parse(this.innerHTML, Array.from(this.classList));
-
-	var out = nodes.map(n => n.data).join("");
-	this.innerHTML = out;
 	this.classList.add("parsed");
-	if (nodes.reduce((current, n) => current + (n.type == "text" ? n.data.length : 0), 0) == 0)
-		this.classList.add("empty"); // if innerHTML only contains empty html (no 'user' text)
+
+	// if innerHTML only contains empty html (no 'user' text)
+	if (nodes.reduce((current, n) => current + (n.type == "text" ? n.data.length : 0), 0) == 0) {
+		this.classList.add("empty");
+		this.innerHTML = "";
+		return;
+	}
+	this.innerHTML = nodes.map(n => n.data).join("");
 };
 
 function layout() {
@@ -348,8 +352,10 @@ function run() {
 		};
 
 	// remove spoiler from sentence translation if word reading field is empty
-	if(document.getElementById("target-word-reading").classList.contains("empty"))
+	if(document.getElementById("target-word-reading").classList.contains("empty")) {
 		document.getElementById("sentence-translation").classList.remove("hidden");
+		document.getElementById("sentence-translation").classList.add("visible");
+	}
 
 	layout();
 }
