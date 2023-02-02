@@ -136,6 +136,9 @@ body {
 /* hide furigana but don't shift layout */
 #card.front ruby rt.hidden { visibility: hidden; }
 
+/* don't select furigana when selecting text */
+rt { user-select: none; }
+
 /* extra space above complete translated sentence */
 #card #back #sentence-translation { margin-top: 2em; }
 
@@ -438,6 +441,7 @@ body {
 	opacity: 1;
 	font-size: 75%;
 	font-weight: bold;
+	user-select: none;
 }
 #back .kanji .extra-writings {
 	transition-property: padding, gap;
