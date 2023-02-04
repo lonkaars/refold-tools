@@ -316,7 +316,6 @@ rt { user-select: none; }
 .subtile .script-japanese { font-style: normal; } /* italic japanese looks weird */
 
 /* word note style */
-#card #target-word-reading .kanji { position: relative; }
 #card #target-word-reading .note {
 	line-height: 0;
 	margin: 0;
@@ -327,6 +326,7 @@ rt { user-select: none; }
 	margin: 0;
 	margin-bottom: 0.5em;
 }
+.mobile #card.vertical-layout #target-word-reading .kanji { display: flex; }
 
 /* definitions */
 #card #target-word-translation .definitions {
@@ -398,11 +398,16 @@ rt { user-select: none; }
 /* indicator (pitch accent pattern) */
 #target-word-reading .indicator::after { border: none; }
 #target-word-reading .indicator {
+	--pitch-accent-padding: 4px;
 	position: relative;
 	font-size: 80%;
 	font-weight: bold;
+	width: calc(1em + var(--pitch-accent-padding));
+	height: calc(1em + var(--pitch-accent-padding));
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 }
-#target-word-reading .indicator .content { margin: 1px 6px; }
 #target-word-reading .indicator::before {
 	border-radius: 6px;
 	content: "";
@@ -530,7 +535,6 @@ rt { user-select: none; }
 .mobile #card.vertical-layout #back #target-word-reading:hover .kanji .extra-writings .writing::after { opacity: 20%; }
 .mobile #card.vertical-layout #back .kanji,
 .mobile #card.vertical-layout #back .kanji .extra-writings { flex-direction: column; }
-.mobile #card.vertical-layout #back .kanji { padding-top: 0.5em; }
 .mobile #card.vertical-layout #back .kanji .extra-writings { padding: 0.5em 0; }
 .mobile #card.vertical-layout #back #target-word-reading:hover .kanji .extra-writings { padding: 0; }
 .mobile #card.vertical-layout #back .kanji .extra-writings .writing { grid-template-rows: 0fr; }
