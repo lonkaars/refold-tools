@@ -24,6 +24,7 @@
 	--indicator-opacity: 50%; /* opacity of indicators in translations (word type) */
 	--pitch-accent-opacity: 70%; /* opacity of pitch accent indicator in reading field */
 	--reading-expand-transition: calc(300ms * var(--global-transition-scale)); /* hover expand transition duration for multiple readings */
+	--active-transition: calc(80ms * var(--global-transition-scale));
 }
 .mobile #card {
 	--text-block-padding: 0.5em;
@@ -547,3 +548,13 @@ rt { user-select: none; }
 #card.horizontal-layout #target-word-reading > * {
 	vertical-align: middle;
 }
+
+/* mobile tap highlight */
+.mobile #card * { -webkit-tap-highlight-color: transparent; }
+.mobile #card #sentence-translation .outer {
+	box-shadow: 0 0 0 0px currentColor;
+	transition-property: box-shadow;
+	transition-duration: var(--active-transition);
+}
+.mobile #card #sentence-translation .outer:active { box-shadow: 0 0 0 2px currentColor; }
+
