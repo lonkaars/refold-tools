@@ -253,8 +253,7 @@ rt { user-select: none; }
 }
 #card #back #tags .tag { background-color: var(--tag-color-light); }
 .night_mode #card #back #tags .tag { background-color: var(--tag-color-dark); }
-#card #back #tags .tag .inner { color: white; }
-.night_mode #card #back #tags .tag .inner { color: black; }
+#card #back #tags .tag .inner { color: canvas; }
 #card #back #tags .tag {
 	--tag-hue: 0;
 	padding: 4px;
@@ -339,7 +338,7 @@ rt { user-select: none; }
 	display: inline;
 }
 
-#card #target-word-translation .definitions .definition-separator::after { content: ", "; }
+#card #target-word-translation .definitions:has(.script-latin) .definition-separator::after { content: ", "; }
 
 /* mobile definitions style */
 .mobile #card.vertical-layout #target-word-translation .definitions {
@@ -378,6 +377,7 @@ rt { user-select: none; }
 .indicator .content { margin: 1px 4px; }
 .indicator .stamp {
 	position: relative;
+	min-width: calc(1lh - 4px);
 	padding: 2px 4px;
 	margin: 1px;
 	font-weight: bold;
@@ -418,13 +418,15 @@ rt { user-select: none; }
 }
 
 /* theme colors */
-#target-word-reading .indicator,
-.indicator .stamp { color: white; }
+#target-word-reading .indicator .content,
+.indicator .stamp span { color: canvas; }
+.night_mode #target-word-reading .indicator .content,
+.night_mode .indicator .stamp span { color: currentColor; }
 .indicator .stamp::before,
-#target-word-reading .indicator::before { background-color: black; }
+#target-word-reading .indicator::before { background-color: currentColor; }
 .night_mode #target-word-translation .indicator .stamp::before,
 .night_mode #target-word-reading .indicator::before {
-	background-color: white; opacity: calc(0.45 * var(--pitch-accent-opacity));
+	opacity: calc(0.45 * var(--pitch-accent-opacity));
 }
 
 /* grey color in definitions */
@@ -556,4 +558,7 @@ rt { user-select: none; }
 	transition-duration: var(--active-transition);
 }
 .mobile #card #sentence-translation .outer:active { box-shadow: 0 0 0 2px currentColor; }
+
+#card { color-scheme: light; }
+.night_mode #card { color-scheme: dark; }
 

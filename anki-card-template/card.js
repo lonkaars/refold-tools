@@ -214,7 +214,6 @@ function parseReading(nodes) {
 			else out += input[i];
 		}
 		flush_writings(); // kana only word fix
-		console.log(out);
 		return out;
 	});
 }
@@ -255,9 +254,16 @@ function parseDefinitions(nodes) {
 			if (input[i] == "}" && subtile) { subtile = false; out += `</span>`; continue; }
 
 			// definition separator
-			if (input[i] == "," && !subtile && !parenthesis) {
-				out += `</li><li class="definition-separator"></li><li class="definition">`;
-				continue;
+			if (!subtile && !parenthesis) {
+				if (input[i] == ",") {
+					out += `</li><li class="definition-separator"></li><li class="definition">`;
+					continue;
+				} else if (input[i] == "\u3002") {
+					out += `${input[i]}</li>`;
+					if (input.substr(i+1).trim().length > 0)
+						out += `<li class="definition-separator"></li><li class="definition">`;
+					continue;
+				}
 			}
 
 			// ignore comma's starting new definition in parenthesis
@@ -280,8 +286,10 @@ function parseScript(nodes) {
 		var out = "";
 		for (var i = 0; i < input.length; i++) {
 			var script = "unknown";
-			if (!charNotJapanese(input[i])) script = "japanese";
-			if (!charNotLatin(input[i])) script = "latin";
+			if (input[i] != " ") {
+				if (!charNotJapanese(input[i])) script = "japanese";
+				if (!charNotLatin(input[i])) script = "latin";
+			}
 
 			if (i == 0) out += `<span class="script-${script}">`;
 			else if (script != lastScript) out += `</span><span class="script-${script}">`;
