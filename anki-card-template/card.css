@@ -90,8 +90,8 @@ body {
 }
 
 /* increase contrast of highlighted word */
-#card #sentence:has(b) > * { opacity: var(--sentence-highlight-contrast); }
-#card #sentence > b { opacity: 100%; }
+#card #sentence.has-b > * { opacity: var(--sentence-highlight-contrast); }
+#card #sentence.has-b > b { opacity: 100%; }
 
 /* body margin */
 body {
@@ -338,7 +338,7 @@ rt { user-select: none; }
 	display: inline;
 }
 
-#card #target-word-translation .definitions:has(.script-latin) .definition-separator::after { content: ", "; }
+#card #target-word-translation.has-script-latin .definitions .definition-separator::after { content: ", "; }
 
 /* mobile definitions style */
 .mobile #card.vertical-layout #target-word-translation .definitions {

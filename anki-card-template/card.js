@@ -321,6 +321,13 @@ function parse(input, classes) {
 	return nodes;
 };
 
+HTMLElement.prototype.has = function(fn) {
+	if (fn(this)) return true;
+	for (var child of this.children)
+		if (child.has(fn)) return true;
+	return false;
+};
+
 HTMLElement.prototype.parse = function() {
 	if (this.classList.contains("parsed")) return; // ignore already parsed elements
 
@@ -334,6 +341,8 @@ HTMLElement.prototype.parse = function() {
 		return;
 	}
 	this.innerHTML = nodes.map(n => n.data).join("");
+	if (this.id == "sentence" && this.has(n => n.tagName == "B")) this.classList.add("has-b");
+	if (this.id == "target-word-translation" && this.has(n => n.classList.contains("script-latin"))) this.classList.add("has-script-latin");
 };
 
 function layout() {
