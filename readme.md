@@ -7,3 +7,9 @@ this is a repo with language learning stuff:
 - [yomichan stuff](yomichan-user/readme.md)  
   (custom theme, sentence export/copy button plugin)
 
+todo:
+
+- yomichan handwriting popup/input like in google translate using
+  [handwriting.js](https://github.com/ChenYuHo/handwriting.js)
+- play audio for word in anki card template (download/stream/localStorage
+  cache?)

@@ -9,9 +9,7 @@ that is visible on either both sides or only on the back side, spoilers,
 definition context hints, and word type indicators. it supports a vertical and
 horizontal layout, desktop and mobile, as well as light and dark themes.
 
-> currently, some css is slightly broken on the desktop version of anki, but
-> this should be fixed as qt merges a newer version of chromium (>= 105) into
-> the QTWebview library. this does not affect useability
+> animations are now working in desktop Anki >=2.1.62
 
 ## example
 
@@ -20,7 +18,7 @@ horizontal layout, desktop and mobile, as well as light and dark themes.
 |Field|Value|
 |-|-|
 |Complete sentence|`*ハンパなく*[鍛](きた)えてやるから[覚悟](かくご)するゴロ！`|
-|Target word reading|`半端ない【はん・ぱ・ない】(uk)`|
+|Target word reading|`半端ない、ハンパない【はん・ぱ・ない】[4] (uk)`|
 |Target word translation|`[い-adj] extreme, impressive, staggering {of height}`|
 |Complete sentence translation|`I'm going to train you like crazy, so be prepared!`|
 |Tags|`ゼルダの伝説 ブレス・オブ・ザ・ワイルド`|
@@ -29,14 +27,19 @@ horizontal layout, desktop and mobile, as well as light and dark themes.
 
 |![](../assets/card-front.png)|![](../assets/card-back-hidden.png)|![](../assets/card-back-visible.png)|
 |-|-|-|
-|front|back|spoiler & tag|
+|front|back|clicked sentence, hover tags, and hover reading|
+
+> Having a lot of information on a single card is generally discouraged, so the
+> sentence translation, tags and alternate writings are hidden by default and
+> can be shown when hovered/clicked.
 
 ## set-up
 
 i don't know how to create a teplate deck (if that's even a thing), so these
 are instructions to apply to an empty deck.
 
-1. run `make` to generate files
+1. run `make` to generate files (or download from [github
+   releases](https://github.com/lonkaars/refold-tools/releases))
 2. Under Tools > Manage note types > (note type here) > Fields, make sure the
    following fields exist (might be case-sensitive):
    | |name|description|
@@ -94,7 +97,7 @@ examples:
 |`\t`|(literal tab character)|
 |`\n`|html `<br>`|
 
-sensitive to the following characters: `[](){}`
+sensitive to the following characters: `*_`
 
 ### parse-furigana
 
@@ -112,8 +115,9 @@ sensitive to the following characters: `[](){}`
 
 ### parse-definitions
 
-parse list of definitions separated by commas, and convert text between curly
-brackets to subtile text. commas do not start a new definition inside subtile
+parse list of latin definitions separated by commas, or japanese definitions
+separated by japanese full stop, and convert text between curly brackets to
+subtile text. commas/full stops do not start a new definition inside subtile
 text and parenthesis, and are inserted normally.
 
 example:
@@ -121,13 +125,14 @@ example:
 |input|output|
 |-|-|
 |`word {subtile, or is it} (this is, a single item)\, and still is here, but not here`|<ul><li>word <i style="font-size: 70%">subtile, or is it</i> (this is, a single item), and still is here</li><li>but not here</li></ul>|
+|`単語定義１。定義２。`|<ul><li>単語定義１。</li><li>定義２。</li></ul>|
 
 in desktop horizontal, desktop vertical, and mobile horizontal layouts,
 definitions are displayed on a single line, separated by a comma. in the
 vertical mobile layout, items are separated by a short bar, and displayed in a
 vertical list.
 
-sensitive to the following characters: `{}(),`
+sensitive to the following characters: `{}(),。`
 
 ### parse-indicators
 
@@ -148,9 +153,17 @@ sensitive to the following characters: `[]-`
 
 parse reading field. start of input is tagged with class `kanji`, everything
 between lenticular brackets is tagged with class `reading`, note can be added
-with regular parenthesis (for marking if word is usually written as kanji).
+with regular parenthesis (for marking if word is usually written as kanji),
+pitch accent index can be added using square brackets. if a word is commonly
+written in multiple ways, they can be separated by a japanese comma.
 
-sensitive to the following characters: `【】()` (and line start)
+example (+1 marker expands to other readings when hovered/tapped):
+
+|input|output|
+|-|-|
+|`半端ない、ハンパない【はん・ぱ・ない】[4] (uk)`|![](../assets/reading-all.png)|
+
+sensitive to the following characters: `【】()・、` (and line start)
 
 ### parse-script
 
