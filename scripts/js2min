@@ -1,0 +1,10 @@
+#!/bin/sh
+export PATH="$PATH:`dirname $0`/filters"
+cat $@ |\
+	remove_double_slash_comments |\
+	to_single_line |\
+	remove_slash_star_comments |\
+	remove_tabs |\
+	remove_whitespace |\
+	trim_whitespace
+
