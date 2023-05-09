@@ -1,3 +1,5 @@
+{
+
 async function exportSentence() {
 	var inputHTML = document.getElementById("query-parser-content");
 	var output = "";
@@ -43,10 +45,12 @@ function patchSearchBar() {
 }
 
 (() => {
-	if (document.body.classList.contains("patched")) return;
+	if (document.body.classList.contains("sentence-export-patched")) return;
 
 	patchSearchBar();
 
-	document.body.classList.add("patched");
+	document.body.classList.add("sentence-export-patched");
 })();
+
+}
 

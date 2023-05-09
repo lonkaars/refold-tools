@@ -35,3 +35,9 @@ adds the following shortcuts to yomichan:
 |<kbd>Alt</kbd>+<kbd>J</kbd>|select next definition (move down)|
 |<kbd>Alt</kbd>+<kbd>K</kbd>|select previous definition (move up)|
 |<kbd>Alt</kbd>+<kbd>G</kbd>|scroll back to top|
+
+## handwriting
+
+adds handwriting input panel to yomichan (WIP)
+
+

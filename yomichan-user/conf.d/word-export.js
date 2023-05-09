@@ -1,3 +1,5 @@
+{
+
 function exportWord(entry) {
 	var wordElement = entry.getElementsByClassName("headword-term")[0];
 	var hasKanji = false;
@@ -43,7 +45,7 @@ function exportWord(entry) {
 function addWordCopyButtons() {
 	var definitions = document.getElementById("dictionary-entries").getElementsByClassName("entry");
 	for (var definition of definitions) {
-		if (definition.classList.contains("patched")) continue;
+		if (definition.classList.contains("word-export-patched")) continue;
 		var actions = definition.getElementsByClassName("actions")[0];
 
 		var button = document.createElement("button");
@@ -59,7 +61,7 @@ function addWordCopyButtons() {
 		icon.setAttribute("data-title-default", title);
 		button.appendChild(icon);
 		actions.insertBefore(button, actions.childNodes[0]);
-		definition.classList.add("patched");
+		definition.classList.add("word-export-patched");
 	}
 }
 
@@ -75,3 +77,5 @@ function addWordCopyButtons() {
 		exportWord(document.getElementsByClassName("entry-current")[0]);
 	});
 })();
+
+}

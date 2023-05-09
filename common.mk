@@ -4,10 +4,10 @@ JSMIN ?= ../scripts/js2min
 CSSMIN ?= ../scripts/css2min
 
 %.min.js: %.js
-	$(JSMIN) < $< > $@
+	$(JSMIN) $< > $@
 
 %.min.css: %.css
-	$(CSSMIN) < $< > $@
+	$(CSSMIN) $< > $@
 
 %: %.m4
 	m4 $(M4FLAGS) $< > $@

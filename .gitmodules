@@ -1,0 +1,3 @@
+[submodule "yomichan-user/lib/handwriting.js"]
+	path = yomichan-user/lib/handwriting.js
+	url = https://github.com/ChenYuHo/handwriting.js
