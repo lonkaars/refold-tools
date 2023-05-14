@@ -562,3 +562,9 @@ rt { user-select: none; }
 #card { color-scheme: light; }
 .night_mode #card { color-scheme: dark; }
 
+/* horizontal numbers and punctuation in single kana space in vertical japanese */
+#card.vertical-layout #sentence .horizontal-in-vertical { writing-mode: horizontal-tb; }
+.squeeze {
+	transform: translateX(calc(var(--self-height) / 2 * -1px)) scaleX(calc(var(--self-height) / var(--self-width)));
+	width: 0;
+}

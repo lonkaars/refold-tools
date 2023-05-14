@@ -5,7 +5,7 @@ include(`common.m4')dnl
 
 <div id="card" class="CARD_SIDE() vertical-layout">
 <div id="front">
-<span id="sentence" class="parse parse-furigana parse-format foreign">{{Complete sentence}}</span>
+<span id="sentence" class="parse parse-furigana parse-format parse-script foreign">{{Complete sentence}}</span>
 </div>
 <hr id="separator">
 <div id="back">

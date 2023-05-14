@@ -14,6 +14,21 @@ function charNotJapanese(input) {
 	return true;
 }
 
+function charNotNumeric(input) {
+	var code = input.charCodeAt(0);
+	if (0x30 <= code && code <= 0x39) return false; // ascii numbers
+	return true;
+}
+
+function charNotPunctuation(input) {
+	var code = input.charCodeAt(0);
+	if (0x20 == code) return false; // space
+	if (0x21 == code) return false; // exclamation mark
+	if (0x2e == code) return false; // full stop
+	if (0x3f == code) return false; // question mark
+	return true;
+}
+
 function calculateTagHue(input) {
 	var out = 0;
 	for (var i = 0; i < input.length; i++)
@@ -282,22 +297,38 @@ function parseScript(nodes) {
 	return parseOnTextOnly(nodes, input => {
 		if (input.length == 0) return input;
 
+		var numberOnly = true;
+		var punctuationOnly = true;
+		var script = "unknown";
 		var lastScript = "unknown";
 		var out = "";
+		var buffer = "";
+		function flush() {
+			var classes = [`script-${lastScript}`];
+			if (numberOnly) classes.push("number-only");
+			if (punctuationOnly) classes.push("punctuation-only");
+			if (numberOnly || punctuationOnly) classes.push("horizontal-in-vertical");
+			out += `<span class="${classes.join(" ")}">${buffer}</span>`;
+			buffer = "";
+			numberOnly = true;
+			punctuationOnly = true;
+		}
 		for (var i = 0; i < input.length; i++) {
-			var script = "unknown";
 			if (input[i] != " ") {
 				if (!charNotJapanese(input[i])) script = "japanese";
 				if (!charNotLatin(input[i])) script = "latin";
 			}
 
-			if (i == 0) out += `<span class="script-${script}">`;
-			else if (script != lastScript) out += `</span><span class="script-${script}">`;
+			if (i != 0 && script != lastScript) flush();
 
-			out += input[i];
+			if (charNotNumeric(input[i])) numberOnly = false;
+			if (charNotPunctuation(input[i])) punctuationOnly = false;
+
+			buffer += input[i];
 			lastScript = script;
 		}
-		return out + "</span>";
+		flush();
+		return out;
 	});
 }
 
@@ -343,6 +374,13 @@ HTMLElement.prototype.parse = function() {
 	this.innerHTML = nodes.map(n => n.data).join("");
 	if (this.id == "sentence" && this.has(n => n.tagName == "B")) this.classList.add("has-b");
 	if (this.id == "target-word-translation" && this.has(n => n.classList.contains("script-latin"))) this.classList.add("has-script-latin");
+
+	for (var el of this.getElementsByClassName("horizontal-in-vertical")) {
+		var size = el.getBoundingClientRect();
+		el.style.setProperty("--self-width", size.width);
+		el.style.setProperty("--self-height", size.height);
+		if (size.width > size.height) el.classList.add("squeeze");
+	}
 };
 
 function layout() {
