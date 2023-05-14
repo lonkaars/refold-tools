@@ -564,7 +564,8 @@ rt { user-select: none; }
 
 /* horizontal numbers and punctuation in single kana space in vertical japanese */
 #card.vertical-layout #sentence .horizontal-in-vertical { writing-mode: horizontal-tb; }
-.squeeze {
+#card.vertical-layout .squeeze {
 	transform: translateX(calc(var(--self-height) / 2 * -1px)) scaleX(calc(var(--self-height) / var(--self-width)));
 	width: 0;
+	white-space: nowrap;
 }
