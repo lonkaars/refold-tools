@@ -575,3 +575,39 @@ rt { user-select: none; }
 	width: 0;
 	white-space: nowrap;
 }
+
+/* make elements within this class display on one line */
+.vertical-layout .flex-line { flex-direction: column; }
+.horizontal-layout .flex-line { flex-direction: row; }
+.flex-line {
+	display: flex !important;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 0;
+}
+
+/* display:none utility class */
+.display-none { display: none; }
+
+/* play audio button size */
+.mobile .replay-button svg {
+	width: 48px !important;
+	height: 48px !important;
+}
+.replay-button svg {
+	width: 24px !important;
+	height: 24px !important;
+}
+
+/* maximize size of touch target (for mobile) */
+.replay-button {
+	margin: 0px !important;
+	padding: 6px; /* max allowed padding w/o changing page layout */
+	color: var(--fg);
+}
+/* force play icon to be same as text color */
+.replay-button svg path {
+	fill: currentColor !important;
+}
+

@@ -419,6 +419,15 @@ function run() {
 		document.getElementById("sentence-translation").classList.add("visible");
 	}
 
+	// replace ugly anki play icon with material design icon
+	for (var el of document.querySelectorAll("#audio .replay-button")) {
+		el.innerHTML = document.getElementById("play-icon").outerHTML;
+		el.children[0].classList.remove("display-none");
+	}
+
+	var audio = document.getElementById("audio");
+	if (audio.innerText.trim() == "noaudio") audio.classList.add("display-none");
+
 	layout();
 }
 

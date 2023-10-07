@@ -16,6 +16,24 @@
 		bottom: 0;
 		margin: 1em;
 	}
+	/* from reviewer.css */
+	.replay-button {
+		text-decoration: none;
+		display: inline-flex;
+		vertical-align: middle;
+		margin: 3px;
+	}
+	.replay-button svg {
+		width: 40px;
+		height: 40px;
+	}
+	.replay-button svg circle {
+		fill: #fff;
+		stroke: #414141;
+	}
+	.replay-button svg path {
+		fill: #414141;
+	}
 	</style>
 </head>
 <body>
@@ -26,11 +44,16 @@
 </div>
 <hr id="separator">
 <div id="back">
+<span class="flex-line">
 <span id="target-word-reading" class="parse parse-format parse-reading parse-indicators parse-script foreign">見舞われる,他の書き方、書き方３【み・まわれる】[0] (note)</span>
+<span id="audio"><a class="replay-button soundLink" href="#" onclick="pycmd('play:a:0'); return false;"><svg class="playImage" viewBox="0 0 64 64" version="1.1"><circle cx="32" cy="32" r="29"></circle><path d="M56.502,32.301l-37.502,20.101l0.329,-40.804l37.173,20.703Z"></path></svg></a></span>
+</span>
 <span id="target-word-translation" class="parse parse-format parse-definitions parse-indicators parse-script native">[verb] To experi\ence {crisis}, [な-adj] to <span class="inline spoiler hidden parse">undergo</span>, [テスト] to suffer {test,テスト,test} (this is, a single item)\, and still is here, [ば\-test] but not here</span>
 <span id="sentence-translation" class="parse parse-format native spoiler parse-script hidden">This village is now in danger of *extinction* because of _Vah Ruta_, the water divine beast.</span>
 <span id="tags" class="parse parse-tags">ゼルダの伝説 ブレス・オブ・ザ・ワイルド</span>
 </div>
+
+<svg id="play-icon" class="display-none" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z"/></svg>
 
 <style>
 #card.front #dev-button-flip::after { content: "front"; }
