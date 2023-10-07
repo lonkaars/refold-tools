@@ -189,7 +189,7 @@ function parseReading(nodes) {
 			out += `<span class="kanji">`;
 			for(let i = 0; i < writings.length; i++) {
 				if (i == 1) out += `<span class="extra-writings">`;
-				if (i > 0) out += `<span class="writing-separator"><span class="inner">\u3001</span></span>`;
+				if (i > 0) out += `<span class="writing-separator"><span class="inner">、</span></span>`;
 				var classes = ["writing"];
 				if (i == 0) classes.push("first");
 				out += `<span class="${classes.join(' ')}"><span class="inner">${writings[i].trim()}</span></span>`;
@@ -212,18 +212,18 @@ function parseReading(nodes) {
 			// ignore note if parsed
 			else if (i == note_head) { i = note_tail - 1; continue; }
 			// reading open bracket
-			if (mode == "writing" && input[i] == '\u3010') {
+			if (mode == "writing" && input[i] == '【') {
 				mode = "reading";
 				flush_writings();
 				out += `</span><span class="reading"><span class="bracket">${input[i]}</span><span class="syllable">`;
 				continue;
 			}
 			// reading closing bracket
-			if (mode == "reading" && input[i] == '\u3011') { out += `</span><span class="bracket">${input[i]}</span></span>`; continue; }
+			if (mode == "reading" && input[i] == '】') { out += `</span><span class="bracket">${input[i]}</span></span>`; continue; }
 			// interpunct (syllable separator)
-			if (mode == "reading" && input[i] == '\u30fb') { out += `</span><span class="syllable-separator">${input[i]}</span><span class="syllable">`; continue; }
+			if (mode == "reading" && input[i] == '・') { out += `</span><span class="syllable-separator">${input[i]}</span><span class="syllable">`; continue; }
 			// comma (writing separator)
-			if (mode == "writing" && (input[i] == ',' || input[i] == "\u3001")) { writings[++writingIndex] = ""; continue; }
+			if (mode == "writing" && (input[i] == ',' || input[i] == "、")) { writings[++writingIndex] = ""; continue; }
 
 			if (mode == "writing") writings[writingIndex] += input[i];
 			else out += input[i];
@@ -241,7 +241,8 @@ function parseTags(nodes) {
 }
 
 function parseDefinitions(nodes) {
-	out = `<ul class="definitions"><li class="definition">`;
+	let classes = ["definitions"];
+	let out = "";
 	var subtile = false; // current text is subtile
 	var parenthesis = false; // current text is surrounded by parenthesis
 
@@ -262,7 +263,9 @@ function parseDefinitions(nodes) {
 				if (escaped == "(") { out += "("; i++; continue; }
 				if (escaped == ")") { out += ")"; i++; continue; }
 				if (escaped == "\\") { out += "\\"; i++; continue; }
+				if (escaped == "。") { out += "。"; i++; continue; }
 			}
+			if (input[i] == "。" && !classes.includes("hidecomma")) classes.push("hidecomma");
 
 			// subtile brackets
 			if (input[i] == "{") { subtile = true; out += `<span class="subtile">`; continue; }
@@ -273,9 +276,11 @@ function parseDefinitions(nodes) {
 				if (input[i] == ",") {
 					out += `</li><li class="definition-separator"></li><li class="definition">`;
 					continue;
-				} else if (input[i] == "\u3002") {
+				} else if (input[i] == "。") {
+					// TODO: comma is inserted in definition-separator instead of using css psuedo
+					let last = input.substr(i+1).trim().length == 0;
 					out += `${input[i]}</li>`;
-					if (input.substr(i+1).trim().length > 0)
+					if (!last)
 						out += `<li class="definition-separator"></li><li class="definition">`;
 					continue;
 				}
@@ -289,6 +294,8 @@ function parseDefinitions(nodes) {
 		}
 	}
 
+	if (!classes.includes("hidecomma")) classes.push("showcomma");
+	out = `<ul class="${classes.join(" ")}"><li class="definition">` + out;
 	out += `</li></ul>`;
 	return HTMLtoParseArr(out);
 }

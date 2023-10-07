@@ -25,6 +25,12 @@
 	--pitch-accent-opacity: 70%; /* opacity of pitch accent indicator in reading field */
 	--reading-expand-transition: calc(300ms * var(--global-transition-scale)); /* hover expand transition duration for multiple readings */
 	--active-transition: calc(80ms * var(--global-transition-scale));
+
+	/* colors */
+	--fg: canvastext;
+	--fg-alt: buttonface;
+	--bg: canvas;
+	--bg-alt: buttontext;
 }
 .mobile #card {
 	--text-block-padding: 0.5em;
@@ -338,7 +344,7 @@ rt { user-select: none; }
 	display: inline;
 }
 
-#card #target-word-translation.has-script-latin .definitions .definition-separator::after { content: ", "; }
+#card #target-word-translation .definitions.showcomma .definition-separator::after { content: ", "; }
 
 /* mobile definitions style */
 .mobile #card.vertical-layout #target-word-translation .definitions {
