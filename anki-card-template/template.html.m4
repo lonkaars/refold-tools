@@ -11,7 +11,8 @@ include(`common.m4')dnl
 <div id="back">
 <span class="flex-line">
 <span id="target-word-reading" class="parse parse-format parse-reading parse-indicators parse-script foreign">{{Target word reading}}</span>
-<span id="audio">{{ Audio }}</span>
+ifelse(CARD_SIDE(), `back', `<span id="audio">{{ Audio }}</span>
+')dnl
 </span>
 <span id="target-word-translation" class="parse parse-format parse-definitions parse-indicators parse-script native">{{Target word translation}}</span>
 <span id="sentence-translation" class="parse parse-format native spoiler parse-script hidden">{{Complete sentence translation}}</span>
