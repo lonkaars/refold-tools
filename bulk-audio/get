@@ -1,0 +1,54 @@
+#!/bin/sh
+
+KANJI="$1"
+KANA="$2"
+OUTPUT="$3"
+
+if [ -z "$KANJI" -o -z "$KANA" -o -z "$OUTPUT" ]; then
+	cat << EOF
+usage: $0 <kanji> <kana> <output>
+
+return value is 0 if <output> was succesfully written, 1 if the word could not
+be found. this script searches languagepod101, languagepod101 (alt) and
+jisho.org.
+EOF
+	exit 1
+fi
+
+get_languagepod101() {
+	curl -so "$OUTPUT" "https://assets.languagepod101.com/dictionary/japanese/audiomp3.php?kanji=$KANJI&kana=$KANA"
+}
+
+get_languagepod101_alt() {
+	HTML="$(curl -s -X POST \
+		"https://www.japanesepod101.com/learningcenter/reference/dictionary_post" \
+		-H "Content-Type: application/x-www-form-urlencoded" \
+		-d "post=dictionary_reference&match_type=exact&search_query=$KANJI&vulgar=true" \
+	)"
+	[ $? -ne 0 ] && return 1
+	URL="$(echo "$HTML" | pup "audio source attr{src}" | head -n1)"
+	[ -z "$URL" ] && return 1
+	curl -so "$OUTPUT" "$URL"
+}
+
+get_jisho() {
+	HTML="$(curl -s "https://jisho.org/search/$KANJI")"
+	[ $? -ne 0 ] && return 1
+	URL="$(echo "$HTML" | pup "audio[id=\"audio_$KANJI:$KANA\"] source attr{src}" | head -n1)"
+	[ -z "$URL" ] && return 1
+	URL="https:$URL"
+	curl -so "$OUTPUT" "$URL"
+}
+
+get_languagepod101_alt
+[ $? -eq 0 ] && exit 0
+
+get_jisho
+[ $? -eq 0 ] && exit 0
+
+get_languagepod101
+[ $? -eq 0 ] && exit 0
+
+# if none were succesful, delete output file and exit with error
+rm -f "$OUTPUT"
+exit 1
