@@ -2,11 +2,10 @@
 
 KANJI="$1"
 KANA="$2"
-OUTPUT="$3"
 
-if [ -z "$KANJI" -o -z "$KANA" -o -z "$OUTPUT" ]; then
+if [ -z "$KANJI" -o -z "$KANA" ]; then
 	cat << EOF
-usage: $0 <kanji> <kana> <output>
+usage: $0 <kanji> <kana> > <output>
 
 return value is 0 if <output> was succesfully written, 1 if the word could not
 be found. this script searches languagepod101, languagepod101 (alt) and
@@ -16,7 +15,13 @@ EOF
 fi
 
 get_languagepod101() {
-	curl -so "$OUTPUT" "https://assets.languagepod101.com/dictionary/japanese/audiomp3.php?kanji=$KANJI&kana=$KANA"
+  URL="https://assets.languagepod101.com/dictionary/japanese/audiomp3.php?kanji=$KANJI&kana=$KANA"
+  # 52288 is the content-length of the "the audio for this clip is currently
+  # not available. it will be recorded and uploaded shortly. thank you for your
+  # patience" message (404, but server sends 200 anyways)
+  curl -X HEAD -iso - "$URL" | awk '/^Content-length:/ { exit $2 == 52288 }'
+	[ $? -ne 0 ] && return 1
+	curl -so - "$URL"
 }
 
 get_languagepod101_alt() {
@@ -28,7 +33,7 @@ get_languagepod101_alt() {
 	[ $? -ne 0 ] && return 1
 	URL="$(echo "$HTML" | pup "audio source attr{src}" | head -n1)"
 	[ -z "$URL" ] && return 1
-	curl -so "$OUTPUT" "$URL"
+	curl -so - "$URL"
 }
 
 get_jisho() {
@@ -37,14 +42,14 @@ get_jisho() {
 	URL="$(echo "$HTML" | pup "audio[id=\"audio_$KANJI:$KANA\"] source attr{src}" | head -n1)"
 	[ -z "$URL" ] && return 1
 	URL="https:$URL"
-	curl -so "$OUTPUT" "$URL"
+	curl -so - "$URL"
 }
 
-get_languagepod101_alt
-[ $? -eq 0 ] && exit 0
-
-get_jisho
-[ $? -eq 0 ] && exit 0
+# get_languagepod101_alt
+# [ $? -eq 0 ] && exit 0
+# 
+# get_jisho
+# [ $? -eq 0 ] && exit 0
 
 get_languagepod101
 [ $? -eq 0 ] && exit 0
