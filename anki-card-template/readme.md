@@ -1,13 +1,12 @@
 # anki sentence mining template
 
-work in progress
-
 this is an anki card template for sentence mining. it has fields for a foreign
-sentence, foreign word reading, translated word and an optional translated
-sentence. it has built-in parsers for adding markdown-like styling, furigana
-that is visible on either both sides or only on the back side, spoilers,
-definition context hints, and word type indicators. it supports a vertical and
-horizontal layout, desktop and mobile, as well as light and dark themes.
+sentence, foreign word reading, translated word, translated sentence and audio.
+
+it has built-in parsers for adding markdown-like styling, furigana that is
+visible on either both sides or only on the back side, spoilers, definition
+context hints, and word type indicators. it supports a vertical and horizontal
+layout, desktop and mobile, as well as light and dark themes.
 
 > animations are now working in desktop Anki >=2.1.62
 
@@ -48,6 +47,7 @@ are instructions to apply to an empty deck.
    |2|Target word reading|Dictionary reading of word (with word type)|
    |3|Target word translation|(In context) translation of target word|
    |4|Complete sentence translation|Complete sentence translation|
+   |5|Audio|Audio field (regular `[sound:file.mp3]` or `noaudio`/empty for no audio)|
 3. In the 'Browse' view, click on Cards... (you might need to create a
    temporary card in a deck) and paste the contents of front-template.html and
    back-template.html in the front template and back template of the card type.
