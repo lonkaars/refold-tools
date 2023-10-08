@@ -12,6 +12,7 @@ from time import sleep
 real_stdout = sys.stdout
 class TrashFileIO(object):
   def write(self, x): pass
+  def flush(self): pass
 trash_out = TrashFileIO()
 
 sys.stdout = trash_out

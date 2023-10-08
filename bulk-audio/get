@@ -1,9 +1,13 @@
 #!/bin/sh
 
 SCRIPT_NAME="$0"
-SOURCES="lp101,lp101_alt,jisho"
+SOURCES="lp101,lp101_alt,jisho,nhk"
 KANJI=""
 KANA=""
+
+urlencode() {
+	printf '%s' "$1" | od -An -tx1 | tr ' ' '%' | tr '[:lower:]' '[:upper:]'
+}
 
 lp101() {
   URL="https://assets.languagepod101.com/dictionary/japanese/audiomp3.php?kanji=$KANJI&kana=$KANA"
@@ -34,8 +38,17 @@ jisho() {
 	[ $? -ne 0 ] && return
 	URL="$(echo "$HTML" | pup "audio[id=\"audio_$KANJI:$KANA\"] source attr{src}" | head -n1)"
 	[ -z "$URL" ] && return
-	URL="https:$URL"
-	curl -so - "$URL"
+	curl -so - "https:$URL"
+	exit 0
+}
+
+nhk() {
+	BASE_URL="https://sakura-paris.org"
+	HTML="$(curl -s "$BASE_URL/dict/NHK日本語発音アクセント辞典/prefix/$KANJI")"
+	[ $? -ne 0 ] && return
+	URL="$(echo "$HTML" | pup "#$(urlencode $KANJI) audio source[src\$=\".mp3\"] attr{src}" | head -n1)"
+	[ -z "$URL" ] && return
+	curl -so - "$BASE_URL$URL"
 	exit 0
 }
 
