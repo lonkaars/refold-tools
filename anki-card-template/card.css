@@ -24,7 +24,7 @@
 	--indicator-opacity: 50%; /* opacity of indicators in translations (word type) */
 	--pitch-accent-opacity: 70%; /* opacity of pitch accent indicator in reading field */
 	--reading-expand-transition: calc(300ms * var(--global-transition-scale)); /* hover expand transition duration for multiple readings */
-	--active-transition: calc(80ms * var(--global-transition-scale));
+	--active-detransition: calc(150ms * var(--global-transition-scale));
 
 	/* colors */
 	--fg: canvastext;
@@ -558,12 +558,17 @@ rt { user-select: none; }
 
 /* mobile tap highlight */
 .mobile #card * { -webkit-tap-highlight-color: transparent; }
-.mobile #card #sentence-translation .outer {
+.mobile #card #sentence-translation .outer,
+.mobile #card #audio svg {
 	box-shadow: 0 0 0 0px currentColor;
 	transition-property: box-shadow;
-	transition-duration: var(--active-transition);
+	transition-duration: var(--active-detransition);
 }
-.mobile #card #sentence-translation .outer:active { box-shadow: 0 0 0 2px currentColor; }
+.mobile #card #sentence-translation .outer:active,
+.mobile #card #audio:active svg {
+	box-shadow: 0 0 0 2px currentColor;
+	transition-duration: 0ms;
+}
 
 #card { color-scheme: light; }
 .night_mode #card { color-scheme: dark; }
@@ -598,6 +603,7 @@ rt { user-select: none; }
 .replay-button svg {
 	width: 24px !important;
 	height: 24px !important;
+	border-radius: 25%; /* display rounded tap highlight on mobile */
 }
 
 /* maximize size of touch target (for mobile) */
