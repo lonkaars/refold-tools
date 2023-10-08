@@ -1,59 +1,91 @@
 #!/bin/sh
 
-KANJI="$1"
-KANA="$2"
+SCRIPT_NAME="$0"
+SOURCES="lp101,lp101_alt,jisho"
+KANJI=""
+KANA=""
 
-if [ -z "$KANJI" -o -z "$KANA" ]; then
-	cat << EOF
-usage: $0 <kanji> <kana> > <output>
-
-return value is 0 if <output> was succesfully written, 1 if the word could not
-be found. this script searches languagepod101, languagepod101 (alt) and
-jisho.org.
-EOF
-	exit 1
-fi
-
-get_languagepod101() {
+lp101() {
   URL="https://assets.languagepod101.com/dictionary/japanese/audiomp3.php?kanji=$KANJI&kana=$KANA"
   # 52288 is the content-length of the "the audio for this clip is currently
   # not available. it will be recorded and uploaded shortly. thank you for your
   # patience" message (404, but server sends 200 anyways)
   curl -X HEAD -iso - "$URL" | awk '/^Content-length:/ { exit $2 == 52288 }'
-	[ $? -ne 0 ] && return 1
+	[ $? -ne 0 ] && return
 	curl -so - "$URL"
+	exit 0
 }
 
-get_languagepod101_alt() {
+lp101_alt() {
 	HTML="$(curl -s -X POST \
 		"https://www.japanesepod101.com/learningcenter/reference/dictionary_post" \
 		-H "Content-Type: application/x-www-form-urlencoded" \
 		-d "post=dictionary_reference&match_type=exact&search_query=$KANJI&vulgar=true" \
 	)"
-	[ $? -ne 0 ] && return 1
+	[ $? -ne 0 ] && return
 	URL="$(echo "$HTML" | pup "audio source attr{src}" | head -n1)"
-	[ -z "$URL" ] && return 1
+	[ -z "$URL" ] && return
 	curl -so - "$URL"
+	exit 0
 }
 
-get_jisho() {
+jisho() {
 	HTML="$(curl -s "https://jisho.org/search/$KANJI")"
-	[ $? -ne 0 ] && return 1
+	[ $? -ne 0 ] && return
 	URL="$(echo "$HTML" | pup "audio[id=\"audio_$KANJI:$KANA\"] source attr{src}" | head -n1)"
-	[ -z "$URL" ] && return 1
+	[ -z "$URL" ] && return
 	URL="https:$URL"
 	curl -so - "$URL"
+	exit 0
 }
 
-# get_languagepod101_alt
-# [ $? -eq 0 ] && exit 0
-# 
-# get_jisho
-# [ $? -eq 0 ] && exit 0
+usage() {
+	cat << EOF
+usage: $SCRIPT_NAME [OPTIONS] <KANJI> <KANA> > <OUTPUT>
 
-get_languagepod101
-[ $? -eq 0 ] && exit 0
+attempt to download a native Japanese recording of word written as KANJI and
+read as KANA. outputs mp3 to stdout. return value is 0 if OUTPUT was written
+(clip was found), and 1 if no clip could be found.
+
+options:
+	-s <source1[,source2,...]>    set source order (default: $SOURCES)
+	-h                            show help
+
+sources:
+	lp101        JapanesePod101
+	lp101_alt    JapanesePod101 (Alternate)
+	jisho        Jisho.org
+EOF
+}
+
+while getopts 'hs:' OPT; do
+	case $OPT in
+		h)
+			usage
+			exit 0
+			;;
+		s)
+			SOURCES="$OPTARG"
+			;;
+		\?|*)
+			usage > /dev/stderr
+			exit 1
+			;;
+	esac
+done
+
+# invalid argument count
+if [ $(( $# - $OPTIND + 1 )) -ne 2 ]; then
+	usage > /dev/stderr
+	exit 1
+fi
+
+KANJI=${@:$OPTIND:1}
+KANA=${@:$OPTIND+1:1}
+
+$(printf '%s;' "$SOURCES" | sed -z 's/[;,\n]/ ; /g')
 
 # if none were succesful, delete output file and exit with error
 rm -f "$OUTPUT"
 exit 1
+
