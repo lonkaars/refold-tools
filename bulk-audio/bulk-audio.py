@@ -40,6 +40,8 @@ def main():
   model = col.models.by_name(NOTE_TYPE)
   note_ids = col.models.nids(model)
 
+  edited_notes = 0
+
   for note_index, note_id in enumerate(note_ids):
     note = col.get_note(note_id)
     note_index_format = ("{:0" + str(floor(log10(len(note_ids))) + 1) + "d}/{:d}").format(note_index + 1, len(note_ids))
@@ -87,9 +89,14 @@ def main():
     note[AUDIO_FIELD_NAME] = audio_str
     note.flush()
     print(f"written audio as {audio_str}")
+    edited_notes += 1
 
   # save collection (and exit)
   col.save()
+  if edited_notes == 0:
+    print("-- Done: no edits --")
+  else:
+    print(f"-- Done: succesfully edited {edited_notes} note{'' if edited_notes == 1 else 's'} --")
 
 # run ./get to get audio data from stdout
 # returns (exit_code, stdout_data)
