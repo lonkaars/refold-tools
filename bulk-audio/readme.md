@@ -28,4 +28,5 @@ template](../anki-card-template) by default.
 |`./bulk-audio.py`|Download audio for all notes with empty Audio field|
 |`./bulk-audio.py -nO`|Try to download audio again for notes with "noaudio" Audio field|
 |`./bulk-audio.py -C`|Clear all Audio fields|
+|`./bulk-audio.py -q flag:1 -O -s lp101_alt`|Override audio of all notes with red flag with audio from JapanesePod101 (Alternate)|
 

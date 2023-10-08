@@ -48,6 +48,7 @@ def parse_args(argv):
   parser.add_argument("-n", "--noaudio", help="only modify notes that have \"noaudio\" as AUDIO_FIELD value", action='store_true')
   parser.add_argument("-i", "--note-id", help="select specific note (specify multiple times to select multiple notes)", action='append', nargs=1, default=[])
   parser.add_argument("-d", "--dry-run", help="print only, do not edit anything", action='store_true')
+  parser.add_argument("-q", "--query", help="filter notes by search query", default=None)
   return parser.parse_known_args(argv[1:])
 
 def main():
@@ -65,6 +66,7 @@ def main():
   sys.stdout = real_stdout
   if aqt.mw == None:
     print("Please close any open Anki windows before running this script!")
+    sys.stdout = trash_out
     exit(1)
 
   # load last open profile if no profile was specified on command line (option parsed by Anki)
@@ -85,8 +87,14 @@ def main():
   if options.noaudio:
     note_ids = [nid for nid in note_ids if col.get_note(nid)[options.audio_field] == "noaudio"]
 
+  # filter flagged notes
+  if options.query != None:
+    filtered_note_ids = col.find_notes(options.query)
+    note_ids = [nid for nid in note_ids if nid in filtered_note_ids]
+
   if len(note_ids) == 0:
     print("-- No notes found! (check your filters or note type?) --")
+    sys.stdout = trash_out
     exit(1)
 
   edited_notes = 0
