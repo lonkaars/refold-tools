@@ -108,12 +108,9 @@ def main():
     if options.clear_audio:
       if not options.dry_run:
         note[options.audio_field] = ""
-        note.flush()
+        col.update_note(note)
       print(f"cleared \"{options.audio_field}\" field!")
       continue
-
-    # autosave deck every 20 cards
-    if note_index % 20 == 0: col.save()
 
     # skip any notes that already have audio
     if not options.force_override and len(note[options.audio_field]) > 0:
@@ -132,7 +129,7 @@ def main():
     if exit_code != 0:
       if not options.dry_run:
         note[options.audio_field] = "noaudio"
-        note.flush()
+        col.update_note(note)
       edited_notes += 1
       print("skipped -> no recording available, marked as 'noaudio'")
       continue
@@ -150,12 +147,10 @@ def main():
     audio_str = f"[sound:{filename}]"
     if not options.dry_run:
       note[options.audio_field] = audio_str
-      note.flush()
+      col.update_note(note)
     print(f"written audio as {audio_str}")
     edited_notes += 1
 
-  # save collection (and exit)
-  col.save()
   if edited_notes == 0:
     print("-- Done: no edits --")
   else:
