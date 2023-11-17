@@ -8,6 +8,7 @@ import io
 import argparse
 from math import floor, log10
 from time import sleep
+from pathlib import Path
 
 real_stdout = sys.stdout
 class TrashFileIO(object):
@@ -161,7 +162,7 @@ def main():
 # run ./get to get audio data from stdout
 # returns (exit_code, stdout_data)
 def get(kanji, kana, source_list):
-  args = ["./get"]
+  args = [Path(__file__).parent.joinpath("get")]
   if source_list != None:
     args.append("-s")
     args.append(source_list)
