@@ -250,6 +250,7 @@ rt { user-select: none; }
 	padding: 10px;
 	opacity: 60%;
 	transition: opacity var(--tag-transition);
+	line-height: 1.5;
 }
 
 /* tag style */

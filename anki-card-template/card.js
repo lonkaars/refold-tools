@@ -239,7 +239,6 @@ function parseTags(nodes) {
 	tags = tags.replaceAll("::", " "); // treat subtags as normal tags
 	tags = tags.split(" "); // split on space (tags may not contain spaces)
 	tags = Array.from(new Set(tags)); // remove duplicates
-	tags = tags.sort(); // sort the tags
 	tags = tags.map(text => text.replaceAll("_", " ")); // display underscore as space
 	for (var tag of tags)
 		out += `<span class="tag" style="--tag-hue: ${calculateTagHue(tag)};"><span class="inner">${tag}</span></span>`;
