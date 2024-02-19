@@ -162,7 +162,7 @@ def main():
 # run ./get to get audio data from stdout
 # returns (exit_code, stdout_data)
 def get(kanji, kana, source_list):
-  args = [Path(__file__).parent.joinpath("get")]
+  args = [Path(__file__).resolve().parent.joinpath("get")]
   if source_list != None:
     args.append("-s")
     args.append(source_list)
