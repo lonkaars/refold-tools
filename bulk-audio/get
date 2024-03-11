@@ -70,32 +70,22 @@ sources:
 	jisho        Jisho.org
 	nhk          NHK日本語発音アクセント辞典
 EOF
+	exit ${1:-0}
 }
 
 while getopts 'hs:' OPT; do
-	case $OPT in
-		h)
-			usage
-			exit 0
-			;;
-		s)
-			SOURCES="$OPTARG"
-			;;
-		\?|*)
-			usage > /dev/stderr
-			exit 1
-			;;
+	case "$OPT" in
+		h) usage ;;
+		s) SOURCES="$OPTARG" ;;
+		\?|*) usage 1 ;;
 	esac
 done
 
-# invalid argument count
-if [ $(( $# - $OPTIND + 1 )) -ne 2 ]; then
-	usage > /dev/stderr
-	exit 1
-fi
+shift $(($OPTIND - 1))
+[ $# -ne 2 ] && usage 1 >&2
 
-KANJI=${@:$OPTIND:1}
-KANA=${@:$OPTIND+1:1}
+KANJI="$1"
+KANA="$2"
 
 $(printf '%s;' "$SOURCES" | sed -z 's/[;,\n]/ ; /g')
 
