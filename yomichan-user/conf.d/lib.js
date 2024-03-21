@@ -37,7 +37,7 @@ function rubyHelper(element, reading) {
 	for (var child of element.childNodes) {
 		if (reading && child.nodeName != "RT") continue;
 		if (!reading && child.nodeName == "RT") continue;
-		out += child.innerText;
+		out += child.textContent;
 	}
 	return out;
 }
