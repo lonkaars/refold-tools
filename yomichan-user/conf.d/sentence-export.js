@@ -50,6 +50,13 @@ function patchSearchBar() {
 	patchSearchBar();
 
 	document.body.classList.add("sentence-export-patched");
+
+	window.addEventListener("keydown", ev => {
+		if (ev.code != "KeyC") return;
+		if (ev.shiftKey != true) return;
+		if (ev.altKey != true) return;
+		document.getElementById("anki-sentence-export-button").click();
+	});
 })();
 
 }

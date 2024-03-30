@@ -1,4 +1,4 @@
-.PHONY: clean all
+.PHONY: clean all FORCE
 
 M4FLAGS += -I./assets/
 
@@ -40,8 +40,7 @@ user.js:
 user.css:
 	cat $^ > $@
 
-header.txt: header.txt.m4
-header.txt: ../.git/HEAD
+header.txt: header.txt.m4 FORCE
 
 yomichan-user.js: header.txt user.min.js
 	cat $^ > $@

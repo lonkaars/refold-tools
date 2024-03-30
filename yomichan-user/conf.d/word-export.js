@@ -72,7 +72,8 @@ function addWordCopyButtons() {
 			addWordCopyButtons();
 	});
 	window.addEventListener("keydown", ev => {
-		if (ev.key != "c") return;
+		if (ev.code != "KeyC") return;
+		if (ev.shiftKey != false) return;
 		if (ev.altKey != true) return;
 		exportWord(document.getElementsByClassName("entry-current")[0]);
 	});
