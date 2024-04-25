@@ -1,12 +1,22 @@
 #!/bin/sh
 
 SCRIPT_NAME="$0"
-SOURCES="lp101,lp101_alt,jisho,nhk"
+SOURCES="local_audio,lp101,lp101_alt,jisho,nhk"
 KANJI=""
 KANA=""
 
 urlencode() {
 	printf '%s' "$1" | od -An -tx1 | tr ' ' '%' | tr '[:lower:]' '[:upper:]'
+}
+
+local_audio() {
+	URL="http://localhost:5050/"
+	res="$(curl -sLGo - "$URL" --data-urlencode "term=$KANJI" --data-urlencode "reading=$KANA")"
+	[ $? -ne 0 ] && return
+	URL="$(echo "$res" | jq --raw-output '.audioSources[0].url // empty')"
+	[ -z "$URL" ] && return
+	curl -sLo - "$URL"
+	exit 0
 }
 
 lp101() {
@@ -17,7 +27,6 @@ lp101() {
   curl -X HEAD -iso - "$URL" | awk '/^Content-length:/ { exit $2 == 52288 }'
 	[ $? -ne 0 ] && return
 	curl -sLo - "$URL"
-	exit 0
 }
 
 lp101_alt() {
@@ -65,6 +74,7 @@ options:
 	-h                            show help
 
 sources:
+	local        TheMoeWay local-audio-yomichan server
 	lp101        JapanesePod101
 	lp101_alt    JapanesePod101 (Alternate)
 	jisho        Jisho.org
