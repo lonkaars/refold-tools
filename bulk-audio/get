@@ -15,7 +15,7 @@ local_audio() {
 	[ $? -ne 0 ] && return
 	URL="$(echo "$res" | jq --raw-output '.audioSources[0].url // empty')"
 	[ -z "$URL" ] && return
-	curl -sLo - "$URL"
+	curl -sLo - "$URL" | ffmpeg -hide_banner -loglevel error -i pipe: -f mp3 pipe:
 	exit 0
 }
 
