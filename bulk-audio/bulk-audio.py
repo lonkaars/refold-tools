@@ -16,6 +16,11 @@ class TrashFileIO(object):
   def flush(self): pass
 trash_out = TrashFileIO()
 
+# replace stderr file descriptor with /dev/null
+os.dup2(os.open(os.devnull, os.O_WRONLY), 2)
+# this is the lowest level hack i could find that silences QT errors for
+# subprocesses too
+
 sys.stdout = trash_out
 import aqt
 sys.stdout = real_stdout
