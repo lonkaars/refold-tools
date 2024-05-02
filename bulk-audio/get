@@ -27,6 +27,7 @@ lp101() {
   curl -X HEAD -iso - "$URL" | awk '/^Content-length:/ { exit $2 == 52288 }'
 	[ $? -ne 0 ] && return
 	curl -sLo - "$URL"
+	exit 0
 }
 
 lp101_alt() {
