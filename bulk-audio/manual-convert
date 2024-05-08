@@ -1,0 +1,11 @@
+#!/bin/sh
+for input in "$@" ; do
+	tmp_filename="$(mktemp)"
+	ffmpeg -hide_banner -loglevel error -i "$input" -f mp3 pipe: > "$tmp_filename"
+
+	sum="$(sha1sum "$tmp_filename" | cut -c1-40)"
+	output_filename="refold-tools-$sum.mp3"
+	cp "$tmp_filename" "./$output_filename"
+	rm -f "$tmp_filename"
+	echo "$input -> $output_filename" >&2
+done
