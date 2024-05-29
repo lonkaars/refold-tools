@@ -1,23 +1,63 @@
+/* clean up header */
 .search-header { margin-top: 12px; }
 .search-options { display: none; }
+
+/* light/dark mode body background-color */
 :root[data-theme=dark] #content-body { background-color: #000000; }
 :root[data-theme=light] #content-body { background-color: #ffffff; }
+
+/* outlined instead of filled tags */
 .tag .tag-label { background-color: unset; }
 .tag {
-    border: 2px solid var(--tag-color);
-    border-radius: 6px;
+	border: 1px solid var(--tag-color);
+	border-radius: 4px;
 }
 .frequency-group-tag .tag { border: none !important; }
 .tag .tag-body::before { display: none; }
-.frequency-value { font-weight: bold; }
-:root[data-theme=dark] .frequency-value { color: var(--tag-color); }
+.tag-label, .tag-body { padding: 1px 5px; }
+
+/* rounded search box */
 .search-textbox-container {
-    border-radius: 6px;
-    overflow: hidden;
-}
-@media (hover: none) {
-    .entry .actions .action-button { padding: 16px; }
-    .search-header .search-button { width: 48px; }
+	border-radius: 6px;
+	overflow: hidden;
 }
 :root[data-theme=light] { --tag-text-color: #333; }
+
+/* larger buttons on mobile */
+@media (hover: none) {
+	.entry .actions .action-button { padding: 16px; }
+	.search-header .search-button { width: 48px; }
+}
+
+/* hide non useful tags */
+.tag[data-category="dictionary"] { display: none; }
+.tag[data-category="pronunciation-dictionary"] { display: none; }
+
+/* hide name of frequency dictionary */
+.tag[data-category="frequency"] .tag-label { display: none; }
+
+/* display separator as comma */
+:root { --compact-list-separator: ', '; }
+
+/* display frequency and pitch accent inline with entry header */
+.entry-header,
+.entry-body,
+.entry-body-section[data-section-type="frequencies"],
+.entry-body-section[data-section-type="frequencies"] .frequency-group-list,
+.entry-body-section[data-section-type="pronunciations"],
+.entry-body-section[data-section-type="pronunciations"] .pronunciation-group-list,
+.entry-body-section[data-section-type="pronunciations"] .pronunciation-group-list .pronunciation-group
+{ display: inline; }
+
+/* ensure vertical alignment of tags */
+.tag-label,
+.tag-body,
+.tag-label-content {
+	font-size: 10pt;
+	font-weight: 500;
+}
+
+.entry-body-section[data-section-type="pronunciations"] {
+	font-size: calc(0.75 * var(--headword-font-size));
+}
 
