@@ -9,9 +9,13 @@ urlencode() {
 	printf '%s' "$1" | od -An -tx1 | tr ' ' '%' | tr '[:lower:]' '[:upper:]'
 }
 
+normalize_kana() {
+	sed 'y/テデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅ/てでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづ/'
+}
+
 local_audio() {
 	URL="http://localhost:5050/"
-	res="$(curl -sLGo - "$URL" --data-urlencode "term=$KANJI" --data-urlencode "reading=$KANA")"
+	res="$(curl -sLGo - "$URL" --data-urlencode "term=$KANJI" --data-urlencode "reading=$(echo "$KANA" | normalize_kana)")"
 	[ $? -ne 0 ] && return
 	URL="$(echo "$res" | jq --raw-output '.audioSources[0].url // empty')"
 	[ -z "$URL" ] && return
