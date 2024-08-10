@@ -8,7 +8,6 @@ CSSMIN := uglifycss
 all: yomichan-user.js yomichan-user.css
 
 user.js: conf.d/lib.js
-user.js: lib/handwriting.js/handwriting.canvas.js
 
 user.js: conf.d/sentence-export.js
 user.css: conf.d/sentence-export.css
@@ -16,8 +15,6 @@ user.css: conf.d/custom.css
 user.js: conf.d/word-export.js
 user.css: conf.d/word-export.css
 user.js: conf.d/shortcuts.js
-user.js: conf.d/handwriting.js
-user.css: conf.d/handwriting.css
 
 include ../common.mk
 
@@ -32,7 +29,6 @@ GARBAGE += assets/draw.svg.b64
 conf.d/sentence-export.css: assets/copy.svg.b64
 conf.d/sentence-export.css: conf.d/sentence-export.css.m4
 conf.d/word-export.css: assets/copy-bitmap.svg.b64
-conf.d/handwriting.css: assets/draw.svg.b64
 
 user.js:
 	cat $^ > $@

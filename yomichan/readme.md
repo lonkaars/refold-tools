@@ -1,4 +1,4 @@
-# yomichan patch stuff
+# yomichan patch stuff (OBSOLETE)
 
 adds a user.js script to your config and settings page that runs in the search
 page and popup window.
