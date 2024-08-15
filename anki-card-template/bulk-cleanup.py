@@ -43,7 +43,7 @@ def recurseplainify(soup):
       continue
 
     if el.name == 'ruby':
-      output += f'[{el.text}]({el.rt.text})'
+      output += f'[{escape(el.text)}]({escape(el.rt.text)})'
       continue
     
     output += recurseplainify(el)
@@ -81,15 +81,23 @@ def main():
     note = col.get_note(note_id)
     print(f"[nid:{note_id}] ({note_index_format.format(note_index + 1, len(note_ids))})", end="")
 
-    if note['Complete sentence'].find('<') >= 0:
+    field = 'Complete sentence'
+    if note[field].find('<') >= 0:
       print(" -> sentence HTML to plain", end="")
-      note['Complete sentence'] = html2cardtemplate(note['Complete sentence'])
+      note[field] = html2cardtemplate(note[field])
       edited = True
 
-    if note['Target word reading'].find('<') >= 0:
-      soup = BeautifulSoup(note['Target word reading'])
-      note['Target word reading'] = soup.get_text()
+    field = 'Target word reading'
+    if note[field].find('<') >= 0:
+      soup = BeautifulSoup(note[field])
+      note[field] = soup.get_text()
       print(" -> stripped HTML from TW reading", end="")
+      edited = True
+
+    field = 'Target word translation'
+    if note[field].find('<') >= 0:
+      print(" -> TW TL to plain", end="")
+      note[field] = html2cardtemplate(note[field])
       edited = True
 
     if not edited:
