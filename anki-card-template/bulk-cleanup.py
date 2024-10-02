@@ -21,21 +21,11 @@ sys.stdout = trash_out
 import aqt
 sys.stdout = real_stdout
 
-def escape(plain):
-  plain = plain.replace("*", "\\*")
-  plain = plain.replace("(", "\\(")
-  plain = plain.replace(")", "\\)")
-  plain = plain.replace("[", "\\[")
-  plain = plain.replace("]", "\\]")
-  plain = plain.replace("{", "\\{")
-  plain = plain.replace("}", "\\}")
-  return plain
-
 def recurseplainify(soup):
   output = ""
   for el in soup.children:
-    if el.string:
-      output += escape(el.string)
+    if el.name == None:
+      output += el.string
       continue
 
     if el.name == 'b':
@@ -43,7 +33,7 @@ def recurseplainify(soup):
       continue
 
     if el.name == 'ruby':
-      output += f'[{escape(el.text)}]({escape(el.rt.text)})'
+      output += f'[{el.text}]({el.rt.text})'
       continue
     
     output += recurseplainify(el)
