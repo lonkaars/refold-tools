@@ -3,6 +3,7 @@ import sys
 import os
 import re
 import io
+import importlib
 from math import floor, log10
 from time import sleep
 from pathlib import Path
@@ -13,13 +14,6 @@ class TrashFileIO(object):
   def write(self, x): pass
   def flush(self): pass
 trash_out = TrashFileIO()
-
-# replace stderr file descriptor with /dev/null
-os.dup2(os.open(os.devnull, os.O_WRONLY), 2)
-
-sys.stdout = trash_out
-import aqt
-sys.stdout = real_stdout
 
 def recurseplainify(soup):
   output = ""
@@ -32,7 +26,7 @@ def recurseplainify(soup):
       output += f"*{recurseplainify(el)}*"
       continue
 
-    if el.name == 'ruby':
+    if el.name == 'ruby' and len(el.text) > 0:
       output += f'[{el.text}]({el.rt.text})'
       continue
     
@@ -41,10 +35,10 @@ def recurseplainify(soup):
   return output
 
 def html2cardtemplate(html):
-  soup = BeautifulSoup(html)
+  soup = BeautifulSoup(html, features="lxml")
   return recurseplainify(soup)
 
-def main():
+def main(aqt):
   sys.stdout = trash_out
   app = aqt._run(sys.argv, False)
   sys.stdout = real_stdout
@@ -105,5 +99,12 @@ def main():
   sys.stdout = trash_out
 
 if __name__ == "__main__":
-  main()
+  # replace stderr file descriptor with /dev/null
+  os.dup2(os.open(os.devnull, os.O_WRONLY), 2)
+
+  sys.stdout = trash_out
+  aqt = importlib.import_module("aqt")
+  sys.stdout = real_stdout
+
+  main(aqt)
 
