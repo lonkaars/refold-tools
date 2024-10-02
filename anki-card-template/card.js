@@ -386,13 +386,6 @@ HTMLElement.prototype.parse = function() {
 	this.innerHTML = nodes.map(n => n.data).join("");
 	if (this.id == "sentence" && this.has(n => n.tagName == "B")) this.classList.add("has-b");
 	if (this.id == "target-word-translation" && this.has(n => n.classList.contains("script-latin"))) this.classList.add("has-script-latin");
-
-	for (var el of this.getElementsByClassName("horizontal-in-vertical")) {
-		var size = el.getBoundingClientRect();
-		el.style.setProperty("--self-width", size.width);
-		el.style.setProperty("--self-height", size.height);
-		if (size.width > size.height) el.classList.add("squeeze");
-	}
 };
 
 function layout() {

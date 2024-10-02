@@ -575,12 +575,7 @@ rt { user-select: none; }
 .night_mode #card { color-scheme: dark; }
 
 /* horizontal numbers and punctuation in single kana space in vertical japanese */
-#card.vertical-layout #sentence .horizontal-in-vertical { writing-mode: horizontal-tb; }
-#card.vertical-layout .squeeze {
-	transform: translateX(calc(var(--self-height) / 2 * -1px)) scaleX(calc(var(--self-height) / var(--self-width)));
-	width: 0;
-	white-space: nowrap;
-}
+#card.vertical-layout #sentence .horizontal-in-vertical { text-combine-upright: all; }
 
 /* make elements within this class display on one line */
 .vertical-layout .flex-line { flex-direction: column; }
