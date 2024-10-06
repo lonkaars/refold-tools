@@ -26,7 +26,7 @@ def recurseplainify(soup):
       output += f"*{recurseplainify(el)}*"
       continue
 
-    if el.name == 'ruby' and len(el.text) > 0:
+    if el.name == 'ruby' and len(el.text) > 0 and el.rt is not None:
       output += f'[{el.text}]({el.rt.text})'
       continue
     
